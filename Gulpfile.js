@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var mocha = require('gulp-mocha');
+var runSequence = require('run-sequence');
 
 var directories = {
   source: {
@@ -36,13 +37,19 @@ gulp.task('js', function () {
 
 gulp.task('test', function () {
     return gulp.src(directories.test + '/**/*.js', { read: false })
-        .pipe(mocha({ reporter: 'nyan' }));
+        .pipe(mocha({ reporter: 'spec' }));
 });
 
-gulp.task('build', ['js', 'html', 'css']);
+gulp.task('build', function() {
+  return runSequence(['js', 'html', 'css']);
+});
 
 gulp.task('watch', function () {
-  return gulp.watch([directories.source.base + '/**/*', directories.test + '/**/*'], ['test', 'build']);
+  return gulp.watch([directories.source.base + '/**/*', directories.test + '/**/*'], function() {
+    return runSequence('test', 'build');
+  });
 });
 
-gulp.task('default', ['test', 'build', 'watch']);
+gulp.task('default', function() {
+  return runSequence('test', ['build', 'watch']);
+});
