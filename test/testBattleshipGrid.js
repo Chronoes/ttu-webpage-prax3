@@ -1,24 +1,17 @@
-var assert = require('assert');
+var expect = require('chai').expect;
 var Immutable = require('immutable');
 var module = require('../src/js/BattleshipGrid');
 
-describe('BattleshipGrid', function () {
+describe('BattleshipGrid', function() {
+  console.log(Immutable.IndexedSeq);
   var size = 3;
-  var grid = new module.BattleshipGrid(size);
-  var mockData = Immutable.List([
-    [1, 0, 0],
-    [0, 1, 0],
-    [0, 0, 1]
-  ]);
-  describe('initialisation', function () {
-    it('should set given grid size', function() {
-      assert.equal(size, grid.getSize());
+  var mockGrid = Immutable.Repeat(Immutable.Repeat(-1, size), size);
+  describe('#newGrid()', function () {
+    it('should return a valid grid with given size', function() {
+      expect(mockGrid.equals(module.newGrid(size))).to.be.true;
     });
   });
-  describe('#update()', function () {
+  describe('#updateView()', function () {
     it('should update grid matrix with sent data');
-  });
-  describe('#view()', function () {
-    it('should render a properly sized table in HTML');
   });
 });

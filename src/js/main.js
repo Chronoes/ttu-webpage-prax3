@@ -1,7 +1,7 @@
-//require('jquery');
+// require('jquery');
 
 function main() {
-  //console.log('Hello World');
+  // console.log('Hello World');
   return 'Hello World';
 }
 

@@ -1,26 +1,12 @@
 var Immutable = require('immutable');
 
-function BattleshipGrid(size) {
-  this.constants = {
-    EMPTY_CELL: 0,
-    MISSED_CELL: 1
-  };
-  this.matrix = Immutable.List().setSize(size).map(function(row) {
-    return Immutable.List().setSize(size);
-  });
-  console.log(this.constants);
-};
+var EMPTY_CELL = -1;
+// var MISSED_CELL = -2;
+// var SHIP_SUNK = 0;
+// var SHIP_GUNBOAT = 2;
 
-BattleshipGrid.prototype.getSize = function() {
-  return this.matrix.size;
-};
+function newGrid(size) {
+  return Immutable.Repeat(Immutable.Repeat(EMPTY_CELL, size), size);
+}
 
-BattleshipGrid.prototype.update = function(row, col, value) {
-  this.view(this.matrix.setIn([row, col], value));
-};
-
-BattleshipGrid.prototype.view = function(state) {
-  // code...  
-};
-
-exports.BattleshipGrid = BattleshipGrid;
+exports.newGrid = newGrid;
