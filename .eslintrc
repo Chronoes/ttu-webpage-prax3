@@ -1,0 +1,7 @@
+{
+  "extends": "airbnb-es5",
+  "rules": {
+    "func-names": 0,
+    "new-cap": 0,
+  }
+}
