@@ -3,5 +3,6 @@
   "rules": {
     "func-names": 0,
     "new-cap": 0,
+    "comma-dangle": 0,
   }
 }
