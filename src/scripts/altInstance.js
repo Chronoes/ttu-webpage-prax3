@@ -1,5 +1,5 @@
-var Alt = require('alt');
+const Alt = require('alt');
 
-var altInstance = new Alt();
+const altInstance = new Alt();
 
 module.exports = altInstance;

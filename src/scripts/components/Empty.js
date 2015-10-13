@@ -1,9 +1,9 @@
-var React = require('react');
+const React = require('react');
 
-var Empty = React.createClass({displayName: 'Empty',
+const Empty = React.createClass({displayName: 'Empty',
   render: function() {
     return (
-      React.DOM.div({className: 'ship-empty'}, 0)
+      <div className="ship-empty">0</div>
     );
   },
 });

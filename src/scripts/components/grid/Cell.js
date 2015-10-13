@@ -1,14 +1,15 @@
-var React = require('react');
+const React = require('react');
 
-var Cell = React.createClass({displayName: 'Cell',
+const Cell = React.createClass({displayName: 'Cell',
   propTypes: {
     value: React.PropTypes.element,
     onClick: React.PropTypes.func,
   },
 
   render: function() {
+    const {onCellClick, value} = this.props;
     return (
-      React.DOM.td({onClick: this.props.onClick}, this.props.value)
+      <td onClick={onCellClick}>{value}</td>
     );
   }
 });

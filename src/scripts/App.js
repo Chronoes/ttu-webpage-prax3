@@ -1,13 +1,14 @@
-var React = require('react');
-var GridContainer = require('./components/GridContainer');
+const React = require('react');
+const GridContainer = require('./components/GridContainer');
 
-var App = React.createClass({displayName: 'App',
+const App = React.createClass({displayName: 'App',
   render: function() {
-    var BSgrid = React.createElement(GridContainer);
     return (
-      React.DOM.div(null, 'Test React',
-        React.DOM.div(null, BSgrid)
-      )
+      <div>
+        <h2>Battleship Game</h2>
+        <h4>Marten Tarkin (143076IAPB)</h4>
+        <GridContainer />
+      </div>
     );
   },
 });

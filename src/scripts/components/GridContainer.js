@@ -1,11 +1,12 @@
-var React = require('react');
-var connectToStores = require('alt/utils/connectToStores');
+const React = require('react');
+const connectToStores = require('alt/utils/connectToStores');
 
-var FieldStore = require('../stores/Field');
-var Grid = require('./grid/Grid');
-var GridSize = require('./grid/GridSize');
+const FieldStore = require('../stores/Field');
+const Grid = require('./grid/Grid');
+const GridSize = require('./grid/GridSize');
+const GridShips = require('./grid/GridShips');
 
-var GridContainer = React.createClass({displayName: 'GridContainer',
+const GridContainer = React.createClass({displayName: 'GridContainer',
   statics: {
     getStores: function() {
       return [FieldStore];
@@ -18,10 +19,11 @@ var GridContainer = React.createClass({displayName: 'GridContainer',
 
   render: function() {
     return (
-      React.DOM.div(null,
-        React.createElement(GridSize),
-        React.createElement(Grid, {fieldState: this.props.fieldState})
-      )
+      <div>
+        <GridSize />
+        <GridShips fieldState={this.props.fieldState} />
+        <Grid fieldState={this.props.fieldState} />
+      </div>
     );
   },
 });

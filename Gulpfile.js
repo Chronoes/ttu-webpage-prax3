@@ -1,12 +1,13 @@
-var gulp = require('gulp');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var sass = require('gulp-sass');
-var eslint = require('gulp-eslint');
-var runSequence = require('run-sequence');
-var sasslint = require('gulp-sass-lint');
+const gulp = require('gulp');
+const browserify = require('browserify');
+const source = require('vinyl-source-stream');
+const sass = require('gulp-sass');
+const eslint = require('gulp-eslint');
+const runSequence = require('run-sequence');
+const sasslint = require('gulp-sass-lint');
+const babelify = require('babelify');
 
-var directories = {
+const directories = {
   source: {
     base: './src',
     js: './src/scripts',
@@ -51,6 +52,7 @@ gulp.task('js', function() {
     extensions: ['.js'],
     debug: true
   })
+    .transform(babelify.configure())
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(gulp.dest(directories.distribution));
@@ -64,7 +66,6 @@ gulp.task('watch', function() {
   return gulp.watch([
     './*.js',
     directories.source.base + '/**/*',
-    directories.test + '/**/*'
   ],
   ['build']);
 });

@@ -1,9 +1,9 @@
-var React = require('react');
-var render = require('react-dom').render;
-var App = require('./App');
+const React = require('react');
+const {render} = require('react-dom');
+const App = require('./App');
 
 function main() {
-  render(React.createElement(App), document.getElementById('content'));
+  render(<App />, document.getElementById('content'));
 }
 
 window.onload = main;
