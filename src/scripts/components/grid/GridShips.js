@@ -27,9 +27,11 @@ const GridShips = React.createClass({displayName: 'GridShips',
   render: function() {
     const maxShipCount = this.props.fieldState.get('field').length - 1;
     return (
-      <select defaultValue={maxShipCount} onChange={this.placeNewShips}>
-        {this.shipCountOptions(maxShipCount)}
-      </select>
+      <label>Grid Ships
+        <select defaultValue={maxShipCount} onChange={this.placeNewShips}>
+          {this.shipCountOptions(maxShipCount)}
+        </select>
+      </label>
     );
   },
 });

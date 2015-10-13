@@ -17,3 +17,13 @@ a:active {
 .content {
   margin: 0 auto;
 }
+
+.battleship-grid {
+  @extend .table;
+  @extend .table-bordered;
+  background-color: #2f4438;
+}
+
+.battleship-grid td:hover {
+  background-color: green;
+}

@@ -11,7 +11,11 @@ const Grid = React.createClass({displayName: 'Grid',
     return (
       <tr key={rowIdx}>
         {row.map(function(value, colIdx) {
-          return <Cell key={rowIdx + ' ' + colIdx} value={value} onCellClick={this.handleCellClick.bind(this, rowIdx, colIdx)} />;
+          return (<Cell
+            key={rowIdx + ' ' + colIdx}
+            element={value}
+            onCellClick={this.handleCellClick.bind(this, rowIdx, colIdx)}
+            cellShot={false} />);
         }.bind(this))}
       </tr>
     );
@@ -20,7 +24,7 @@ const Grid = React.createClass({displayName: 'Grid',
   render: function() {
     const field = this.props.fieldState.get('field');
     return (
-      <table className="table table-bordered">
+      <table className="battleship-grid">
         <tbody>
           {field.map(this.renderRow)}
         </tbody>

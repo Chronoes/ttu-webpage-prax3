@@ -23,9 +23,11 @@ const GridSize = React.createClass({displayName: 'GridSize',
 
   render: function() {
     return (
-      <select defaultValue={GridSize.MAX_SIZE} onChange={this.createField}>
-        {this.sizeOptions()}
-      </select>
+      <label>Grid Size
+        <select defaultValue={GridSize.MAX_SIZE} onChange={this.createField}>
+          {this.sizeOptions()}
+        </select>
+      </label>
     );
   },
 });

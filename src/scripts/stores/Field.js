@@ -13,7 +13,6 @@ const FieldStore = alt.createStore(immutable({displayName: 'FieldStore',
 
   state: new Map({
     field: FieldActions.createField(MAX_SIZE),
-    shipCount: MAX_SIZE - 1,
     ships: [],
   }),
 
@@ -22,7 +21,6 @@ const FieldStore = alt.createStore(immutable({displayName: 'FieldStore',
   },
 
   onPlaceShips: function(newState) {
-    console.log(newState);
     const {ships, updatedGrid} = newState;
     this.setState(this.state.set('ships', ships).set('field', updatedGrid));
   },
