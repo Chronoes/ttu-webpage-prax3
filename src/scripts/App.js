@@ -1,5 +1,5 @@
 var React = require('react');
-var GridContainer = require('./Battleship/GridContainer');
+var GridContainer = require('./components/GridContainer');
 
 var App = React.createClass({displayName: 'App',
   render: function() {

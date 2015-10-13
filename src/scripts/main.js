@@ -1,4 +1,3 @@
-// require('jquery');
 var React = require('react');
 var render = require('react-dom').render;
 var App = require('./App');

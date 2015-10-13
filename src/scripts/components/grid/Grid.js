@@ -1,22 +1,19 @@
 var React = require('react');
 
-var utilReact = require('../util/React');
+var utilReact = require('../../util/React');
 var Cell = require('./Cell');
 
 var Grid = React.createClass({displayName: 'Grid',
-  propTypes: {
-    field: React.PropTypes.array,
-  },
-
   handleClick: function(row, col) {
     console.log('Clicked pos: ' + row + ' ' + col);
   },
 
   render: function() {
+    var field = this.props.fieldState.get('field');
     return (
       React.DOM.table(null,
         utilReact.spread(React.DOM.tbody, null,
-          this.props.field.map(function(row, rowIdx) {
+          field.map(function(row, rowIdx) {
             return utilReact.spread(React.DOM.tr, null,
               row.map(function(value, colIdx) {
                 return React.createElement(Cell, {value: value, onClick: this.handleClick.bind(this, rowIdx, colIdx)});

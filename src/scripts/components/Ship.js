@@ -10,7 +10,7 @@ var Ship = React.createClass({displayName: 'Ship',
   },
 
   getInitialState: function() {
-    return {coords: {startRow: 0, startCol: 0, endRow: 0, endCol: this.statics.LENGTH}};
+    return {coords: {startRow: 0, startCol: 0, endRow: 0, endCol: Ship.LENGTH}};
   },
 
   componentWillMount: function() {
