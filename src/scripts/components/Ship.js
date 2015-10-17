@@ -6,13 +6,9 @@ const Ship = React.createClass({displayName: 'Ship',
     HORIZONTAL: 0,
   },
 
-  propTypes: {
-    coords: React.PropTypes.object,
-  },
-
   render: function() {
     return (
-      <div className="ship-frigate">{Ship.LENGTH}</div>
+      <div className="ship-frigate"></div>
     );
   },
 });

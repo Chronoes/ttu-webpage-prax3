@@ -1,26 +1,30 @@
 const React = require('react');
 
+const Empty = require('../Empty');
+
 const Cell = React.createClass({displayName: 'Cell',
   propTypes: {
-    value: React.PropTypes.element,
     onCellClick: React.PropTypes.func,
   },
 
-  getInitialState: function() {
+  getDefaultProps: function() {
     return {cellClicked: false};
   },
 
   handleClick: function() {
     this.props.onCellClick();
-    this.setState({cellClicked: true});
   },
 
   render: function() {
-    const {element} = this.props;
-    const newElement = React.cloneElement(element, {cellClicked: this.state.cellClicked});
-    console.log(newElement);
+    const {children, cellClicked} = this.props;
+    const hit = cellClicked ? 'hit' : '';
+    const miss = cellClicked ? 'miss' : '';
     return (
-      <td onClick={this.handleClick}>{newElement}</td>
+      <td
+        className={children.type.displayName === Empty.displayName ? miss : hit}
+        onClick={this.handleClick} >
+        {children}
+      </td>
     );
   }
 });

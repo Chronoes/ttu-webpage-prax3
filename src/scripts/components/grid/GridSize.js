@@ -1,6 +1,6 @@
 const React = require('react');
 
-const FieldActions = require('../../actions/Field');
+const GameActions = require('../../actions/Game');
 
 const GridSize = React.createClass({displayName: 'GridSize',
   statics: {
@@ -10,7 +10,7 @@ const GridSize = React.createClass({displayName: 'GridSize',
 
   createField: function(event) {
     const size = event ? event.target.value : GridSize.MAX_SIZE;
-    FieldActions.createField(size);
+    GameActions.setupBoard(size);
   },
 
   sizeOptions: function() {

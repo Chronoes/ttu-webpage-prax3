@@ -1,22 +1,26 @@
 const React = require('react');
 
 const alt = require('../altInstance');
+const Cell = require('../components/grid/Cell');
 const Empty = require('../components/Empty');
 const Ship = require('../components/Ship');
 const {isValidSquare, randomNumber} = require('../util/grid');
 
 const FieldActions = alt.createActions({
+  createFieldFor: function(player, size) {
+    return {player, grid: FieldActions.createField(size)};
+  },
+
   createField: function(size) {
     for (var grid = []; grid.length < size;) {
-      for (var subgrid = []; subgrid.push(<Empty />) < size;);
+      for (var subgrid = []; subgrid.push(<Cell><Empty /></Cell>) < size;);
       grid.push(subgrid);
     }
     return grid;
   },
 
-  placeShips: function(grid, count) {
+  placeShipsFor: function(player, grid, count) {
     const size = grid.length;
-    var updatedGrid = grid;
     var ships = [];
     for (var i = 0; i < count; i++) {
       var tries = 0;
@@ -30,17 +34,20 @@ const FieldActions = alt.createActions({
 
         if (validShip) {
           var coords = {start: {row, col}, orientation: Ship.HORIZONTAL};
-          const shipElement = <Ship coords={coords} />;
-          ships.push(shipElement);
-          for (len = 0; len < Ship.LENGTH; len++) {
-            updatedGrid[coords.start.row][coords.start.col + len] = shipElement;
-          }
+          ships.push(<Ship coords={coords} />);
           break;
         }
         tries++;
       }
     }
-    return {ships, updatedGrid};
+    return {player, ships};
+  },
+
+  updateCell: function(cell, row, col) {
+    return {
+      cell: React.cloneElement(cell, {cellClicked: true}),
+      row, col,
+    };
   },
 });
 

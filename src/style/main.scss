@@ -21,9 +21,37 @@ a:active {
 .battleship-grid {
   @extend .table;
   @extend .table-bordered;
-  background-color: #2f4438;
+  background-color: #1b36da;
 }
 
 .battleship-grid td:hover {
   background-color: green;
+}
+
+.battleship-grid td.hit,
+.battleship-grid td.hit:hover {
+  background-color: red;
+}
+
+.battleship-grid td.miss,
+.battleship-grid td.miss:hover {
+  background-color: blue;
+}
+
+.grid-options {
+  @extend .col-xs-2;
+}
+
+.player-one,
+.player-two {
+  @extend .col-lg-5;
+}
+
+.ship-frigate {
+  background-color: gray;
+  padding: 1em;
+}
+
+.ship-empty {
+  padding: 1em;
 }

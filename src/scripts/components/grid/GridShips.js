@@ -1,6 +1,6 @@
 const React = require('react');
 
-const FieldActions = require('../../actions/Field');
+const GameActions = require('../../actions/Game');
 const GridSize = require('./GridSize');
 
 const GridShips = React.createClass({displayName: 'GridShips',
@@ -11,9 +11,7 @@ const GridShips = React.createClass({displayName: 'GridShips',
 
   placeNewShips: function(event) {
     const count = event ? event.target.value : GridShips.MAX_SHIP_COUNT;
-    const field = this.props.fieldState.get('field');
-    const newField = FieldActions.createField(field.length);
-    FieldActions.placeShips(newField, count);
+    GameActions.setupShips(this.props.boardSize, count);
   },
 
   shipCountOptions: function(maxShips) {
@@ -25,7 +23,7 @@ const GridShips = React.createClass({displayName: 'GridShips',
   },
 
   render: function() {
-    const maxShipCount = this.props.fieldState.get('field').length - 1;
+    const maxShipCount = this.props.boardSize - 1;
     return (
       <label>Grid Ships
         <select defaultValue={maxShipCount} onChange={this.placeNewShips}>

@@ -1,21 +1,24 @@
 const React = require('react');
 
-const Cell = require('./Cell');
+const FieldActions = require('../../actions/Field');
 
 const Grid = React.createClass({displayName: 'Grid',
   handleCellClick: function(row, col) {
-    console.log('Clicked pos: ' + row + ' ' + col);
+    if (!this.props.myTurn) {
+      console.log('Clicked pos: ' + row + ' ' + col);
+      const cell = this.props.fieldState.get('field')[row][col];
+      FieldActions.updateCell(cell, row, col);
+    }
   },
 
   renderRow: function(row, rowIdx) {
     return (
       <tr key={rowIdx}>
-        {row.map(function(value, colIdx) {
-          return (<Cell
-            key={rowIdx + ' ' + colIdx}
-            element={value}
-            onCellClick={this.handleCellClick.bind(this, rowIdx, colIdx)}
-            cellShot={false} />);
+        {row.map(function(cell, colIdx) {
+          return (React.cloneElement(cell, {
+            key: rowIdx + ' ' + colIdx,
+            onCellClick: this.handleCellClick.bind(this, rowIdx, colIdx),
+          }));
         }.bind(this))}
       </tr>
     );
