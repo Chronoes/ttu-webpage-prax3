@@ -6,6 +6,10 @@ const eslint = require('gulp-eslint');
 const runSequence = require('run-sequence');
 const sasslint = require('gulp-sass-lint');
 const babelify = require('babelify');
+const sloc = require('gulp-sloc');
+const cache = require('gulp-cached');
+const remember = require('gulp-remember');
+const watchify = require('watchify');
 
 const directories = {
   source: {
@@ -21,6 +25,7 @@ gulp.task('lint:js', function() {
     './*.js',
     directories.source.js + '/**/*.js'
   ])
+    .pipe(cache('scripts'))
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
@@ -28,6 +33,7 @@ gulp.task('lint:js', function() {
 
 gulp.task('lint:sass', function() {
   return gulp.src(directories.source.css + '/**/*.scss')
+    .pipe(cache('style'))
     .pipe(sasslint())
     .pipe(sasslint.format())
     .pipe(sasslint.failOnError());
@@ -37,29 +43,42 @@ gulp.task('lint', ['lint:js', 'lint:sass']);
 
 gulp.task('html', function() {
   return gulp.src(directories.source.html + '/**/*')
+    .pipe(cache('html'))
     .pipe(gulp.dest(directories.distribution));
 });
 
 gulp.task('sass', function() {
   return gulp.src(directories.source.css + '/**/*')
+    .pipe(cache('style'))
     .pipe(sass({includePaths: ['./node_modules/bootstrap/scss']}).on('error', sass.logError))
-    .pipe(gulp.dest(directories.distribution + '/'));
+    .pipe(gulp.dest(directories.distribution));
 });
 
 gulp.task('js', function() {
-  return browserify({
+  const opts = Object.assign({
     entries: directories.source.js + '/main.js',
     extensions: ['.js'],
-    debug: true
-  })
-    .transform(babelify.configure())
+    debug: true,
+    transform: babelify,
+  }, watchify.args);
+  const watcher = watchify(browserify(opts));
+  watcher.on('update', function() {
+    return watcher.close();
+  });
+  return watcher
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(gulp.dest(directories.distribution));
 });
 
+gulp.task('line-count', function() {
+  return gulp.src(directories.source.js + '/**/*.js')
+    .pipe(remember('scripts'))
+    .pipe(sloc());
+});
+
 gulp.task('build', function() {
-  return runSequence('lint', ['js', 'html', 'sass']);
+  return runSequence(['line-count', 'lint'], ['js', 'html', 'sass']);
 });
 
 gulp.task('watch', function() {
