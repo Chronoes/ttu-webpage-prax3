@@ -1,6 +1,8 @@
 const React = require('react');
 
 const FieldActions = require('../../actions/Field');
+const GameActions = require('../../actions/Game');
+const {isEmptyCell} = require('../../util/grid');
 
 const Grid = React.createClass({displayName: 'Grid',
   handleCellClick: function(row, col) {
@@ -8,6 +10,9 @@ const Grid = React.createClass({displayName: 'Grid',
       console.log('Clicked pos: ' + row + ' ' + col);
       const cell = this.props.fieldState.get('field')[row][col];
       FieldActions.updateCell(cell, row, col);
+      if (isEmptyCell(cell)) {
+        GameActions.turnOver();
+      }
     }
   },
 

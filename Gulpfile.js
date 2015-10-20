@@ -25,7 +25,7 @@ gulp.task('lint:js', function() {
     './*.js',
     directories.source.js + '/**/*.js'
   ])
-    .pipe(cache('scripts'))
+    .pipe(remember('scripts'))
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
@@ -33,7 +33,7 @@ gulp.task('lint:js', function() {
 
 gulp.task('lint:sass', function() {
   return gulp.src(directories.source.css + '/**/*.scss')
-    .pipe(cache('style'))
+    .pipe(remember('style'))
     .pipe(sasslint())
     .pipe(sasslint.format())
     .pipe(sasslint.failOnError());
@@ -48,8 +48,8 @@ gulp.task('html', function() {
 });
 
 gulp.task('sass', function() {
-  return gulp.src(directories.source.css + '/**/*')
-    .pipe(cache('style'))
+  return gulp.src(directories.source.css + '/main.scss')
+    .pipe(remember('style'))
     .pipe(sass({includePaths: ['./node_modules/bootstrap/scss']}).on('error', sass.logError))
     .pipe(gulp.dest(directories.distribution));
 });
@@ -61,11 +61,7 @@ gulp.task('js', function() {
     debug: true,
     transform: babelify,
   }, watchify.args);
-  const watcher = watchify(browserify(opts));
-  watcher.on('update', function() {
-    return watcher.close();
-  });
-  return watcher
+  return watchify(browserify(opts))
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(gulp.dest(directories.distribution));

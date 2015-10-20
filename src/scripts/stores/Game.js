@@ -4,7 +4,6 @@ const {Map} = require('immutable');
 const alt = require('../altInstance');
 const FieldActions = require('../actions/Field');
 const GameActions = require('../actions/Game');
-const utilGrid = require('../util/grid');
 const {MAX_SIZE} = require('../components/grid/GridSize');
 
 const GameStore = alt.createStore(immutable({displayName: 'GameStore',
@@ -13,20 +12,25 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
     onPlaceShipsFor: FieldActions.placeShipsFor,
     onUpdateCell: FieldActions.updateCell,
     onTurnOver: GameActions.turnOver,
+    onExpectedShipCount: GameActions.expectedShipCount,
+    onGameStateChange: GameActions.gameStateChange,
   },
 
   state: new Map({
     playerOne: new Map({
       field: FieldActions.createField(MAX_SIZE),
       ships: [],
+      shipCount: 0,
     }),
     playerTwo: new Map({
       field: FieldActions.createField(MAX_SIZE),
       ships: [],
+      shipCount: 0,
     }),
+    gameRunning: false,
     activeBoard: 'playerTwo',
     size: MAX_SIZE,
-    shipCount: 0,
+    expectedShipCount: 0,
   }),
 
   onCreateFieldFor: function(playerField) {
@@ -37,11 +41,14 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
   },
 
   onPlaceShipsFor: function(playerShips) {
-    const {player, ships} = playerShips;
+    const {player, grid, ships} = playerShips;
     this.setState(this.state
+      .update('expectedShipCount', function(value) {
+        return value > ships.length ? ships.length : value;
+      })
       .setIn([player, 'shipCount'], ships.length)
       .setIn([player, 'ships'], ships)
-      .updateIn([player, 'field'], utilGrid.updateGridWithShips.bind(null, ships)));
+      .setIn([player, 'field'], grid));
   },
 
   onUpdateCell: function(cellInfo) {
@@ -54,8 +61,17 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
   },
 
   onTurnOver: function() {
-    const current = this.state.get('activeBoard');
-    this.setState(this.state.set('activeBoard', current === 'playerOne' ? 'playerTwo' : current));
+    this.setState(this.state.update('activeBoard', function(current) {
+      return current === 'playerOne' ? 'playerTwo' : 'playerOne';
+    }));
+  },
+
+  onExpectedShipCount: function(count) {
+    this.setState(this.state.set('expectedShipCount', count));
+  },
+
+  onGameStateChange: function(state) {
+    this.setState(this.state.set('gameRunning', state));
   },
 }));
 

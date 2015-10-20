@@ -1,4 +1,5 @@
 @import 'bootstrap';
+@import './options';
 
 body {
   background-color: #7d7562;
@@ -40,6 +41,7 @@ a:active {
 
 .grid-options {
   @extend .col-xs-2;
+  @extend .form-group;
 }
 
 .player-one,

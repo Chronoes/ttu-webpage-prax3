@@ -23,8 +23,12 @@ function isValidSquare(grid, row, col) {
   return isValid;
 }
 
+function isEmptyCell(cell) {
+  return cell.props.children.type.displayName === Empty.displayName;
+}
+
 function isEmptySquare(grid, row, col) {
-  return grid[row][col].props.children.type.displayName === Empty.displayName;
+  return isEmptyCell(grid[row][col]);
 }
 
 function isInBorders(boardSize, row, col) {
@@ -35,21 +39,19 @@ function randomNumber(mult) {
   return Math.floor(Math.random() * mult);
 }
 
-
-function updateGridWithShips(ships, grid) {
-  for (var i = 0; i < ships.length; i++) {
-    const {coords} = ships[i].props;
-    for (var len = 0; len < Ship.LENGTH; len++) {
-      grid[coords.start.row][coords.start.col + len] = <Cell>{ships[i]}</Cell>;
-    }
+function updateGridWithShip(grid, ship) {
+  for (var len = 0; len < Ship.LENGTH; len++) {
+    const {coords} = ship.props;
+    grid[coords.start.row][coords.start.col + len] = <Cell>{ship}</Cell>;
   }
   return grid;
 }
 
 module.exports = {
   isValidSquare,
+  isEmptyCell,
   isEmptySquare,
   isInBorders,
   randomNumber,
-  updateGridWithShips,
+  updateGridWithShip,
 };

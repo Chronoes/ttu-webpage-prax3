@@ -10,7 +10,9 @@ const GridSize = React.createClass({displayName: 'GridSize',
 
   createField: function(event) {
     const size = event ? event.target.value : GridSize.MAX_SIZE;
-    GameActions.setupBoard(size);
+    if (size >= GridSize.MIN_SIZE) {
+      GameActions.setupBoard(size);
+    }
   },
 
   sizeOptions: function() {
@@ -23,11 +25,12 @@ const GridSize = React.createClass({displayName: 'GridSize',
 
   render: function() {
     return (
-      <label>Grid Size
-        <select defaultValue={GridSize.MAX_SIZE} onChange={this.createField}>
+      <div className="size-select">
+        <select className="value-selection" defaultValue="0" onChange={this.createField}>
+          <option className="disabled" value="0" disabled>Grid Size</option>
           {this.sizeOptions()}
         </select>
-      </label>
+      </div>
     );
   },
 });

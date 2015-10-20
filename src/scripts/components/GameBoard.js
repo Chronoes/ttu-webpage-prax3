@@ -1,6 +1,7 @@
 const React = require('react');
 const connectToStores = require('alt/utils/connectToStores');
 
+const FieldActions = require('../actions/Field.js');
 const GameStore = require('../stores/Game');
 const Grid = require('./grid/Grid');
 const GridSize = require('./grid/GridSize');
@@ -19,9 +20,23 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
         playerTwo: gameState.get('playerTwo'),
         activeBoard: gameState.get('activeBoard'),
         size: gameState.get('size'),
-        shipCount: gameState.get('shipCount'),
+        expectedShipCount: gameState.get('expectedShipCount'),
+        gameRunning: gameState.get('gameRunning'),
       };
     }
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    const {expectedShipCount, playerOne, playerTwo, size} = nextProps;
+    if (playerOne.get('shipCount') > expectedShipCount) {
+      FieldActions.placeShipsFor('playerOne', FieldActions.createField(size), expectedShipCount);
+      return false;
+    }
+    if (playerTwo.get('shipCount') > expectedShipCount) {
+      FieldActions.placeShipsFor('playerTwo', FieldActions.createField(size), expectedShipCount);
+      return false;
+    }
+    return true;
   },
 
   render: function() {
@@ -35,7 +50,7 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
           <Grid fieldState={playerTwo} myTurn={activeBoard !== 'playerTwo'} />
         </div>
         <div className="grid-options">
-          <GridSize />
+          <GridSize boardSize={size} />
           <GridShips boardSize={size} />
         </div>
       </div>

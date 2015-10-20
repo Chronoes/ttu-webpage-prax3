@@ -4,7 +4,7 @@ const alt = require('../altInstance');
 const Cell = require('../components/grid/Cell');
 const Empty = require('../components/Empty');
 const Ship = require('../components/Ship');
-const {isValidSquare, randomNumber} = require('../util/grid');
+const {isValidSquare, randomNumber, updateGridWithShip} = require('../util/grid');
 
 const FieldActions = alt.createActions({
   createFieldFor: function(player, size) {
@@ -21,26 +21,28 @@ const FieldActions = alt.createActions({
 
   placeShipsFor: function(player, grid, count) {
     const size = grid.length;
+    var updatedGrid = grid;
     var ships = [];
     for (var i = 0; i < count; i++) {
       var tries = 0;
       while (tries < 20) {
         const row = randomNumber(size - 1);
         const col = randomNumber(size - 1);
-        var validShip = true;
-        for (var len = 0; len < Ship.LENGTH && validShip; len++) {
-          validShip = isValidSquare(grid, row, col + len);
+        var validShip = isValidSquare(grid, row, col);
+        for (var len = 1; len < Ship.LENGTH && validShip; len++) {
+          validShip = isValidSquare(updatedGrid, row, col + len);
         }
 
         if (validShip) {
-          var coords = {start: {row, col}, orientation: Ship.HORIZONTAL};
-          ships.push(<Ship coords={coords} />);
+          const ship = <Ship id={ships.length} coords={{start: {row, col}, orientation: Ship.HORIZONTAL}} />;
+          ships.push(ship);
+          updatedGrid = updateGridWithShip(updatedGrid, ship);
           break;
         }
         tries++;
       }
     }
-    return {player, ships};
+    return {player, grid: updatedGrid, ships};
   },
 
   updateCell: function(cell, row, col) {
