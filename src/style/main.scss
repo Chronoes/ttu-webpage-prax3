@@ -2,17 +2,18 @@
 @import './options';
 
 body {
-  background-color: #7d7562;
+  background-color: #8d53c7;
+  color: #eee;
 }
 
 a {
   color: #129925;
   text-decoration: none;
-}
 
-a:hover,
-a:active {
-  color: #6d91d9;
+  &:hover,
+  &:active {
+    color: #6d91d9;
+  }
 }
 
 .content {
@@ -22,21 +23,27 @@ a:active {
 .battleship-grid {
   @extend .table;
   @extend .table-bordered;
-  background-color: #1b36da;
-}
+  background-color: #db92db;
 
-.battleship-grid td:hover {
-  background-color: green;
-}
+  & .hit {
+    background-color: red;
+  }
 
-.battleship-grid td.hit,
-.battleship-grid td.hit:hover {
-  background-color: red;
-}
+  & .miss {
+    background-color: blue;
+  }
 
-.battleship-grid td.miss,
-.battleship-grid td.miss:hover {
-  background-color: blue;
+  & td {
+    border-color: #8d53c7;
+    margin: 0;
+    padding: 0;
+  }
+
+  &.active {
+    & td {
+      background-color: green;
+    }
+  }
 }
 
 .grid-options {
@@ -50,10 +57,15 @@ a:active {
 }
 
 .ship-frigate {
-  background-color: gray;
-  padding: 1em;
+  pointer-events: none;
+
+  & .ship-img {
+    height: 100%;
+    pointer-events: none;
+    width: 200%;
+  }
 }
 
 .ship-empty {
-  padding: 1em;
+  padding: 50%;
 }

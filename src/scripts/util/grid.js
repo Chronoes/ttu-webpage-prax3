@@ -35,13 +35,26 @@ function isInBorders(boardSize, row, col) {
   return row >= 0 && row < boardSize && col >= 0 && col < boardSize;
 }
 
+function hasShip(ships, row, col) {
+  for (var i = 0; i < ships.length; i++) {
+    const {coords} = ships[i].props;
+    for (var len = 0; len < Ship.LENGTH; len++) {
+      if (coords.start.col + len === col && coords.start.row === row) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function randomNumber(mult) {
   return Math.floor(Math.random() * mult);
 }
 
 function updateGridWithShip(grid, ship) {
-  for (var len = 0; len < Ship.LENGTH; len++) {
-    const {coords} = ship.props;
+  const {coords} = ship.props;
+  grid[coords.start.row][coords.start.col] =  <Cell primary>{ship}</Cell>;
+  for (var len = 1; len < Ship.LENGTH; len++) {
     grid[coords.start.row][coords.start.col + len] = <Cell>{ship}</Cell>;
   }
   return grid;
@@ -52,6 +65,7 @@ module.exports = {
   isEmptyCell,
   isEmptySquare,
   isInBorders,
+  hasShip,
   randomNumber,
   updateGridWithShip,
 };

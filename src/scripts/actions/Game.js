@@ -24,7 +24,7 @@ const GameActions = alt.createActions({displayName: 'GameActions',
 
   setupShips: function(boardSize, count) {
     const {playerOne, playerTwo} = this.actions.setupBoard(boardSize);
-    GameActions.expectedShipCount(count);
+    this.actions.expectedShipCount(count);
     return {
       playerOne: FieldActions.placeShipsFor(playerOne.player, playerOne.grid, count),
       playerTwo: FieldActions.placeShipsFor(playerTwo.player, playerTwo.grid, count),

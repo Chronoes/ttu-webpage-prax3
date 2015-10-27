@@ -40,14 +40,21 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
   },
 
   render: function() {
-    const {playerOne, playerTwo, activeBoard, size} = this.props;
+    const {playerOne, playerTwo, activeBoard, size, gameRunning} = this.props;
     return (
       <div className="container-fluid">
         <div className="player-one">
-          <Grid fieldState={playerOne} myTurn={activeBoard !== 'playerOne'} />
+          <Grid
+            fieldState={playerOne}
+            myTurn={activeBoard !== 'playerOne'}
+            gameRunning={gameRunning}
+            shipsAreVisible />
         </div>
         <div className="player-two">
-          <Grid fieldState={playerTwo} myTurn={activeBoard !== 'playerTwo'} />
+          <Grid
+            fieldState={playerTwo}
+            myTurn={activeBoard !== 'playerTwo'}
+            gameRunning={gameRunning} />
         </div>
         <div className="grid-options">
           <GridSize boardSize={size} />

@@ -2,15 +2,17 @@ const React = require('react');
 
 const FieldActions = require('../../actions/Field');
 const GameActions = require('../../actions/Game');
-const {isEmptyCell} = require('../../util/grid');
+const {hasShip} = require('../../util/grid');
 
 const Grid = React.createClass({displayName: 'Grid',
   handleCellClick: function(row, col) {
-    if (!this.props.myTurn) {
+    const {gameRunning, myTurn, fieldState} = this.props;
+    if (!gameRunning && !myTurn) {
       console.log('Clicked pos: ' + row + ' ' + col);
-      const cell = this.props.fieldState.get('field')[row][col];
+      const cell = fieldState.get('field')[row][col];
+      const ships = fieldState.get('ships');
       FieldActions.updateCell(cell, row, col);
-      if (isEmptyCell(cell)) {
+      if (!hasShip(ships, row, col)) {
         GameActions.turnOver();
       }
     }
@@ -21,8 +23,9 @@ const Grid = React.createClass({displayName: 'Grid',
       <tr key={rowIdx}>
         {row.map(function(cell, colIdx) {
           return (React.cloneElement(cell, {
-            key: rowIdx + ' ' + colIdx,
+            key: [rowIdx, colIdx],
             onCellClick: this.handleCellClick.bind(this, rowIdx, colIdx),
+            isVisible: this.props.shipsAreVisible,
           }));
         }.bind(this))}
       </tr>

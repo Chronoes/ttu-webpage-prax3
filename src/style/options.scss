@@ -1,10 +1,15 @@
-.grid-options .value-selection {
-  @extend .c-select;
-  border-radius: 15%;
-  cursor: pointer;
-  margin-top: .5em;
-}
+.grid-options {
+  color: #333;
 
-.grid-options .disabled {
-  cursor: not-allowed;
+  & .value-selection {
+    @extend .c-select;
+    background-color: #84dd4d;
+    border-radius: 15%;
+    cursor: pointer;
+    margin-top: .5em;
+  }
+
+  & .disabled {
+    cursor: not-allowed;
+  }
 }

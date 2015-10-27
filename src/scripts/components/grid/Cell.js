@@ -16,14 +16,14 @@ const Cell = React.createClass({displayName: 'Cell',
   },
 
   render: function() {
-    const {children, cellClicked} = this.props;
+    const {children, cellClicked, primary, isVisible} = this.props;
     const hit = cellClicked ? 'hit' : '';
     const miss = cellClicked ? 'miss' : '';
     return (
       <td
         className={children.type.displayName === Empty.displayName ? miss : hit}
-        onClick={this.handleClick} >
-        {children}
+        onClick={this.handleClick}>
+        {isVisible ? React.cloneElement(children, {primary}) : <Empty />}
       </td>
     );
   }

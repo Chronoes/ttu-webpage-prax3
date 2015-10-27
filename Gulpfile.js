@@ -55,6 +55,19 @@ gulp.task('sass', function() {
 });
 
 gulp.task('js', function() {
+  const opts = {
+    entries: directories.source.js + '/main.js',
+    extensions: ['.js'],
+    debug: true,
+    transform: babelify,
+  };
+  return browserify(opts)
+    .bundle()
+    .pipe(source('bundle.js'))
+    .pipe(gulp.dest(directories.distribution));
+});
+
+gulp.task('js:watch', function() {
   const opts = Object.assign({
     entries: directories.source.js + '/main.js',
     extensions: ['.js'],
@@ -77,12 +90,16 @@ gulp.task('build', function() {
   return runSequence(['line-count', 'lint'], ['js', 'html', 'sass']);
 });
 
+gulp.task('build:watch', function() {
+  return runSequence(['line-count', 'lint'], ['js:watch', 'html', 'sass']);
+});
+
 gulp.task('watch', function() {
   return gulp.watch([
     './*.js',
     directories.source.base + '/**/*',
   ],
-  ['build']);
+  ['build:watch']);
 });
 
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['build:watch', 'watch']);
