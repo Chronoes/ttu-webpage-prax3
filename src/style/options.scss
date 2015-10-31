@@ -1,15 +1,27 @@
 .grid-options {
+  @extend .col-xs-2;
+  @extend .form-group;
   color: #333;
 
+  & .start-game,
   & .value-selection {
-    @extend .c-select;
-    background-color: #84dd4d;
-    border-radius: 15%;
-    cursor: pointer;
     margin-top: .5em;
+  }
+
+  & .btn-start-game {
+    @extend .btn;
+    @extend .btn-primary;
   }
 
   & .disabled {
     cursor: not-allowed;
   }
+
+  & .value-selection {
+    @extend .c-select;
+    background-color: #84dd4d;
+    border-radius: .25rem;
+    cursor: pointer;
+  }
+
 }

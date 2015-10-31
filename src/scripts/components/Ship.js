@@ -10,7 +10,7 @@ const Ship = React.createClass({displayName: 'Ship',
     const {primary} = this.props;
     return (
       <div className="ship-frigate">
-        {primary ? <img className="ship-img" src="tarkinship-noshadow.svg" /> : ''}
+        {primary ? <img src="tarkinship-noshadow.svg" /> : ''}
       </div>
     );
   },

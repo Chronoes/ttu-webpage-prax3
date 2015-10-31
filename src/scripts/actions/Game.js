@@ -3,6 +3,10 @@ const alt = require('../altInstance');
 const FieldActions = require('./Field');
 
 const GameActions = alt.createActions({displayName: 'GameActions',
+  startGame: function() {
+    return true;
+  },
+
   turnOver: function() {
     return true;
   },

@@ -38,17 +38,14 @@ a {
     margin: 0;
     padding: 0;
   }
+}
 
-  &.active {
-    & td {
+.active {
+  & td {
+    &:hover {
       background-color: green;
     }
   }
-}
-
-.grid-options {
-  @extend .col-xs-2;
-  @extend .form-group;
 }
 
 .player-one,
@@ -58,11 +55,17 @@ a {
 
 .ship-frigate {
   pointer-events: none;
+  position: relative;
 
-  & .ship-img {
-    height: 100%;
+  & img {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    margin-left: 2%;
     pointer-events: none;
-    width: 200%;
+    position: absolute;
+    user-select: none;
+    width: 195%;
   }
 }
 

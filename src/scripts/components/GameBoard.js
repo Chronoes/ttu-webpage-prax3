@@ -6,6 +6,7 @@ const GameStore = require('../stores/Game');
 const Grid = require('./grid/Grid');
 const GridSize = require('./grid/GridSize');
 const GridShips = require('./grid/GridShips');
+const StartGame = require('./StartGame');
 
 const GameBoard = React.createClass({displayName: 'GameBoard',
   statics: {
@@ -59,6 +60,7 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
         <div className="grid-options">
           <GridSize boardSize={size} />
           <GridShips boardSize={size} />
+          <StartGame />
         </div>
       </div>
     );

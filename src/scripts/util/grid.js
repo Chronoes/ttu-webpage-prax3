@@ -24,7 +24,7 @@ function isValidSquare(grid, row, col) {
 }
 
 function isEmptyCell(cell) {
-  return cell.props.children.type.displayName === Empty.displayName;
+  return cell.props.children.type === Empty;
 }
 
 function isEmptySquare(grid, row, col) {
@@ -35,16 +35,8 @@ function isInBorders(boardSize, row, col) {
   return row >= 0 && row < boardSize && col >= 0 && col < boardSize;
 }
 
-function hasShip(ships, row, col) {
-  for (var i = 0; i < ships.length; i++) {
-    const {coords} = ships[i].props;
-    for (var len = 0; len < Ship.LENGTH; len++) {
-      if (coords.start.col + len === col && coords.start.row === row) {
-        return true;
-      }
-    }
-  }
-  return false;
+function hasShip(ships, cell) {
+  return ships.indexOf(cell.props.children) !== -1;
 }
 
 function randomNumber(mult) {

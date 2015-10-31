@@ -4,6 +4,7 @@ const {Map} = require('immutable');
 const alt = require('../altInstance');
 const FieldActions = require('../actions/Field');
 const GameActions = require('../actions/Game');
+const ShipActions = require('../actions/Ship');
 const {MAX_SIZE} = require('../components/grid/GridSize');
 
 const GameStore = alt.createStore(immutable({displayName: 'GameStore',
@@ -11,6 +12,7 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
     onCreateFieldFor: FieldActions.createFieldFor,
     onPlaceShipsFor: FieldActions.placeShipsFor,
     onUpdateCell: FieldActions.updateCell,
+    onShipSunk: ShipActions.shipSunk,
     onTurnOver: GameActions.turnOver,
     onExpectedShipCount: GameActions.expectedShipCount,
     onGameStateChange: GameActions.gameStateChange,
@@ -57,6 +59,16 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
     this.setState(this.state.updateIn([player, 'field'], function(grid) {
       grid[row][col] = cell;
       return grid;
+    }));
+  },
+
+  onShipSunk: function(ship) {
+    const player = this.state.get('activeBoard');
+    this.setState(this.state.updateIn([player, 'ships'], function(ships) {
+      return ships.splice(ships.indexOf(ship), 1);
+    })
+    .updateIn([player, 'shipCount'], function(count) {
+      return count - 1;
     }));
   },
 

@@ -21,7 +21,7 @@ const Cell = React.createClass({displayName: 'Cell',
     const miss = cellClicked ? 'miss' : '';
     return (
       <td
-        className={children.type.displayName === Empty.displayName ? miss : hit}
+        className={children.type === Empty ? miss : hit}
         onClick={this.handleClick}>
         {isVisible ? React.cloneElement(children, {primary}) : <Empty />}
       </td>

@@ -5,14 +5,23 @@ const GameActions = require('../../actions/Game');
 const {hasShip} = require('../../util/grid');
 
 const Grid = React.createClass({displayName: 'Grid',
+  componentWillReceiveProps: function(nextProps) {
+    const {gameRunning, fieldState} = nextProps;
+    if (gameRunning && fieldState.get('shipCount') === 0) {
+      GameActions.gameStateChange(false);
+    }
+    return true;
+  },
+
   handleCellClick: function(row, col) {
     const {gameRunning, myTurn, fieldState} = this.props;
-    if (!gameRunning && !myTurn) {
-      console.log('Clicked pos: ' + row + ' ' + col);
+    if (gameRunning && !myTurn) {
       const cell = fieldState.get('field')[row][col];
       const ships = fieldState.get('ships');
       FieldActions.updateCell(cell, row, col);
-      if (!hasShip(ships, row, col)) {
+      if (hasShip(ships, cell)) {
+        // TODO: Do this
+      } else {
         GameActions.turnOver();
       }
     }
@@ -33,9 +42,10 @@ const Grid = React.createClass({displayName: 'Grid',
   },
 
   render: function() {
-    const field = this.props.fieldState.get('field');
+    const {fieldState, myTurn, gameRunning} = this.props;
+    const field = fieldState.get('field');
     return (
-      <table className="battleship-grid">
+      <table className={'battleship-grid' + (!gameRunning || myTurn ? '' : ' active')}>
         <tbody>
           {field.map(this.renderRow)}
         </tbody>
