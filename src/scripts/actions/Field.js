@@ -6,7 +6,7 @@ const Empty = require('../components/Empty');
 const Ship = require('../components/Ship');
 const {isValidSquare, randomNumber, updateGridWithShip} = require('../util/grid');
 
-const FieldActions = alt.createActions({
+const FieldActions = alt.createActions({displayName: 'FieldActions',
   createFieldFor: function(player, size) {
     return {player, grid: FieldActions.createField(size)};
   },
@@ -45,10 +45,11 @@ const FieldActions = alt.createActions({
     return {player, grid: updatedGrid, ships};
   },
 
-  updateCell: function(cell, row, col) {
+  updateCell: function(cell, row, col, shipHit) {
     return {
       cell: React.cloneElement(cell, {cellClicked: true}),
       row, col,
+      shipHit: !cell.props.cellClicked && shipHit,
     };
   },
 });

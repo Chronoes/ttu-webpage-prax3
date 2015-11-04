@@ -7,8 +7,8 @@ const {hasShip} = require('../../util/grid');
 const Grid = React.createClass({displayName: 'Grid',
   componentWillReceiveProps: function(nextProps) {
     const {gameRunning, fieldState} = nextProps;
-    if (gameRunning && fieldState.get('shipCount') === 0) {
-      GameActions.gameStateChange(false);
+    if (gameRunning && fieldState.get('health') === 0) {
+      GameActions.gameOver();
     }
     return true;
   },
@@ -18,10 +18,9 @@ const Grid = React.createClass({displayName: 'Grid',
     if (gameRunning && !myTurn) {
       const cell = fieldState.get('field')[row][col];
       const ships = fieldState.get('ships');
-      FieldActions.updateCell(cell, row, col);
-      if (hasShip(ships, cell)) {
-        // TODO: Do this
-      } else {
+      const shipHit = hasShip(ships, cell);
+      FieldActions.updateCell(cell, row, col, shipHit);
+      if (!shipHit) {
         GameActions.turnOver();
       }
     }

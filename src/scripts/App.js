@@ -9,7 +9,10 @@ const App = React.createClass({displayName: 'App',
           <h2>Battleship Game</h2>
           <h4>Marten Tarkin (143076IAPB)</h4>
         </div>
+        <hr />
         <GameBoard />
+        <hr />
+        <HighScores />
       </div>
     );
   },

@@ -27,7 +27,7 @@ const GridShips = React.createClass({displayName: 'GridShips',
     return (
       <div className="ship-select">
         <select className="value-selection" defaultValue="0" onChange={this.placeNewShips}>
-          <option className="disabled" value="0" disabled>Grid Ships</option>
+          <option className="disabled" value="0" disabled>Ships</option>
           {this.shipCountOptions(maxShipCount)}
         </select>
       </div>

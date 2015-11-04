@@ -4,7 +4,6 @@ const {Map} = require('immutable');
 const alt = require('../altInstance');
 const FieldActions = require('../actions/Field');
 const GameActions = require('../actions/Game');
-const ShipActions = require('../actions/Ship');
 const {MAX_SIZE} = require('../components/grid/GridSize');
 
 const GameStore = alt.createStore(immutable({displayName: 'GameStore',
@@ -12,34 +11,39 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
     onCreateFieldFor: FieldActions.createFieldFor,
     onPlaceShipsFor: FieldActions.placeShipsFor,
     onUpdateCell: FieldActions.updateCell,
-    onShipSunk: ShipActions.shipSunk,
     onTurnOver: GameActions.turnOver,
     onExpectedShipCount: GameActions.expectedShipCount,
-    onGameStateChange: GameActions.gameStateChange,
+    onGameStart: GameActions.gameStart,
+    onGameOver: GameActions.gameOver,
   },
 
   state: new Map({
     playerOne: new Map({
       field: FieldActions.createField(MAX_SIZE),
       ships: [],
-      shipCount: 0,
+      health: 0,
     }),
     playerTwo: new Map({
       field: FieldActions.createField(MAX_SIZE),
       ships: [],
-      shipCount: 0,
+      health: 0,
     }),
     gameRunning: false,
     activeBoard: 'playerTwo',
     size: MAX_SIZE,
     expectedShipCount: 0,
+    winner: '',
   }),
 
   onCreateFieldFor: function(playerField) {
     const {player, grid} = playerField;
     this.setState(this.state
       .set('size', grid.length)
-      .setIn([player, 'field'], grid));
+      .setIn([player, 'field'], grid)
+      .set('gameRunning', false)
+      .set('activeBoard', 'playerTwo')
+      .set('winner', '')
+      .set('expectedShipCount', 0));
   },
 
   onPlaceShipsFor: function(playerShips) {
@@ -48,28 +52,22 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
       .update('expectedShipCount', function(value) {
         return value > ships.length ? ships.length : value;
       })
-      .setIn([player, 'shipCount'], ships.length)
+      .setIn([player, 'health'], ships.length * 2)
       .setIn([player, 'ships'], ships)
       .setIn([player, 'field'], grid));
   },
 
   onUpdateCell: function(cellInfo) {
     const player = this.state.get('activeBoard');
-    const {cell, row, col} = cellInfo;
-    this.setState(this.state.updateIn([player, 'field'], function(grid) {
-      grid[row][col] = cell;
-      return grid;
-    }));
-  },
-
-  onShipSunk: function(ship) {
-    const player = this.state.get('activeBoard');
-    this.setState(this.state.updateIn([player, 'ships'], function(ships) {
-      return ships.splice(ships.indexOf(ship), 1);
-    })
-    .updateIn([player, 'shipCount'], function(count) {
-      return count - 1;
-    }));
+    const {cell, row, col, shipHit} = cellInfo;
+    this.setState(this.state
+      .updateIn([player, 'health'], function(value) {
+        return shipHit ? value - 1 : value;
+      })
+      .updateIn([player, 'field'], function(grid) {
+        grid[row][col] = cell;
+        return grid;
+      }));
   },
 
   onTurnOver: function() {
@@ -82,8 +80,14 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
     this.setState(this.state.set('expectedShipCount', count));
   },
 
-  onGameStateChange: function(state) {
-    this.setState(this.state.set('gameRunning', state));
+  onGameStart: function() {
+    this.setState(this.state.set('gameRunning', this.state.get('expectedShipCount') > 0));
+  },
+
+  onGameOver: function() {
+    this.setState(this.state
+      .set('gameRunning', false)
+      .set('winner', this.state.get('activeBoard') === 'playerOne' ? 'playerTwo' : 'playerOne'));
   },
 }));
 

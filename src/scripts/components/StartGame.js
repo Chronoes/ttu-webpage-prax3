@@ -1,21 +1,15 @@
 const React = require('react');
 
-const GameActions = require('../actions/Game');
+function StartGame(props) {
+  return (
+    <div className="start-game">
+      <button className="btn-start-game" onClick={props.clickAction}>
+        Start Game
+      </button>
+    </div>
+  );
+}
 
-const StartGame = React.createClass({
-  startGame: function() {
-    GameActions.gameStateChange(true);
-  },
-
-  render: function() {
-    return (
-      <div className="start-game">
-        <button className="btn-start-game" onClick={this.startGame}>
-          Start Game
-        </button>
-      </div>
-    );
-  },
-});
+StartGame.displayName = 'StartGame';
 
 module.exports = StartGame;

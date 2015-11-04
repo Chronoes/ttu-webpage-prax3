@@ -1,7 +1,8 @@
 const React = require('react');
 const connectToStores = require('alt/utils/connectToStores');
 
-const FieldActions = require('../actions/Field.js');
+const FieldActions = require('../actions/Field');
+const GameActions = require('../actions/Game');
 const GameStore = require('../stores/Game');
 const Grid = require('./grid/Grid');
 const GridSize = require('./grid/GridSize');
@@ -23,17 +24,18 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
         size: gameState.get('size'),
         expectedShipCount: gameState.get('expectedShipCount'),
         gameRunning: gameState.get('gameRunning'),
+        winner: gameState.get('winner'),
       };
     }
   },
 
   componentWillReceiveProps: function(nextProps) {
     const {expectedShipCount, playerOne, playerTwo, size} = nextProps;
-    if (playerOne.get('shipCount') > expectedShipCount) {
+    if (playerOne.get('ships').length > expectedShipCount) {
       FieldActions.placeShipsFor('playerOne', FieldActions.createField(size), expectedShipCount);
       return false;
     }
-    if (playerTwo.get('shipCount') > expectedShipCount) {
+    if (playerTwo.get('ships').length > expectedShipCount) {
       FieldActions.placeShipsFor('playerTwo', FieldActions.createField(size), expectedShipCount);
       return false;
     }
@@ -41,9 +43,16 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
   },
 
   render: function() {
-    const {playerOne, playerTwo, activeBoard, size, gameRunning} = this.props;
+    const {playerOne, playerTwo, activeBoard, size, gameRunning, winner, expectedShipCount} = this.props;
+    var currentHeader = 'Choose grid size and ship count';
+    if (gameRunning) {
+      currentHeader = activeBoard === 'playerTwo' ? 'Player\'s turn' : 'Computer\'s turn';
+    } else if (winner) {
+      currentHeader = winner === 'playerOne' ? 'Player wins!' : 'Computer wins!';
+    }
     return (
       <div className="container-fluid">
+        <h4 className="header">{currentHeader}</h4>
         <div className="player-one">
           <Grid
             fieldState={playerOne}
@@ -60,7 +69,9 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
         <div className="grid-options">
           <GridSize boardSize={size} />
           <GridShips boardSize={size} />
-          <StartGame />
+          <StartGame
+            clickAction={gameRunning ? GameActions.setupShips.bind(null, size, expectedShipCount) : GameActions.gameStart} />
+          <Timer gameRunning={gameRunning} />
         </div>
       </div>
     );

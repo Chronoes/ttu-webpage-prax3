@@ -20,6 +20,10 @@ a {
   margin: 0 auto;
 }
 
+.header {
+  text-align: center;
+}
+
 .battleship-grid {
   @extend .table;
   @extend .table-bordered;

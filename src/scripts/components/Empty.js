@@ -1,11 +1,11 @@
 const React = require('react');
 
-const Empty = React.createClass({displayName: 'Empty',
-  render: function() {
-    return (
-      <div className="ship-empty"></div>
-    );
-  },
-});
+function Empty() {
+  return (
+    <div className="ship-empty"></div>
+  );
+}
+
+Empty.displayName = 'Empty';
 
 module.exports = Empty;
