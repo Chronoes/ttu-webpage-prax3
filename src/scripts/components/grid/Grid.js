@@ -57,7 +57,7 @@ const Grid = React.createClass({displayName: 'Grid',
         {row.map(function(cell, colIdx) {
           return (React.cloneElement(cell, {
             key: [rowIdx, colIdx],
-            onCellClick: !this.props.aiEnabled ? this.handleCellClick.bind(this, rowIdx, colIdx) : '',
+            onCellClick: !this.props.aiEnabled ? this.handleCellClick.bind(this, rowIdx, colIdx) : function() {},
             isVisible: this.props.shipsAreVisible,
           }));
         }.bind(this))}
