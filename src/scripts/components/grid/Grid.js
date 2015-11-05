@@ -57,7 +57,7 @@ const Grid = React.createClass({displayName: 'Grid',
         {row.map(function(cell, colIdx) {
           return (React.cloneElement(cell, {
             key: [rowIdx, colIdx],
-            onCellClick: this.handleCellClick.bind(this, rowIdx, colIdx),
+            onCellClick: !this.props.aiEnabled ? this.handleCellClick.bind(this, rowIdx, colIdx) : '',
             isVisible: this.props.shipsAreVisible,
           }));
         }.bind(this))}
@@ -66,10 +66,10 @@ const Grid = React.createClass({displayName: 'Grid',
   },
 
   render: function() {
-    const {fieldState, myTurn, gameRunning} = this.props;
+    const {fieldState, myTurn, gameRunning, aiEnabled} = this.props;
     const field = fieldState.get('field');
     return (
-      <table className={'battleship-grid' + (!gameRunning || myTurn ? '' : ' active')}>
+      <table className={'battleship-grid' + (!gameRunning || myTurn || aiEnabled ? '' : ' active')}>
         <tbody>
           {field.map(this.renderRow)}
         </tbody>
