@@ -7,8 +7,8 @@ const GameActions = alt.createActions({displayName: 'GameActions',
     return true;
   },
 
-  gameOver: function() {
-    return false;
+  gameOver: function(time) {
+    return time;
   },
 
   turnOver: function() {
@@ -19,8 +19,8 @@ const GameActions = alt.createActions({displayName: 'GameActions',
     return count;
   },
 
-  gameStateChange: function(state) {
-    return state;
+  setGameTime: function(time) {
+    return time;
   },
 
   setupBoard: function(size) {

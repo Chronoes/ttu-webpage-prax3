@@ -3,11 +3,14 @@ const connectToStores = require('alt/utils/connectToStores');
 
 const FieldActions = require('../actions/Field');
 const GameActions = require('../actions/Game');
+const ScoreActions = require('../actions/Score');
 const GameStore = require('../stores/Game');
+const {countShots} = require('../util/grid');
 const Grid = require('./grid/Grid');
 const GridSize = require('./grid/GridSize');
 const GridShips = require('./grid/GridShips');
 const StartGame = require('./StartGame');
+const Timer = require('./Timer');
 
 const GameBoard = React.createClass({displayName: 'GameBoard',
   statics: {
@@ -25,11 +28,26 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
         expectedShipCount: gameState.get('expectedShipCount'),
         gameRunning: gameState.get('gameRunning'),
         winner: gameState.get('winner'),
+        gameTime: gameState.get('gameTime'),
       };
     }
   },
 
+  getInitialState: function() {
+    return {time: 0};
+  },
+
+  tick: function() {
+    this.setState({time: this.state.time + 1});
+  },
+
   componentWillReceiveProps: function(nextProps) {
+    if (!nextProps.gameRunning) {
+      this.setState({time: 0});
+    }
+  },
+
+  shouldComponentUpdate: function(nextProps) {
     const {expectedShipCount, playerOne, playerTwo, size} = nextProps;
     if (playerOne.get('ships').length > expectedShipCount) {
       FieldActions.placeShipsFor('playerOne', FieldActions.createField(size), expectedShipCount);
@@ -40,6 +58,20 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
       return false;
     }
     return true;
+  },
+
+  componentWillUpdate: function(nextProps) {
+    const {winner, gameRunning} = nextProps;
+    if (!gameRunning && winner) {
+      const {size, expectedShipCount, playerOne, playerTwo, gameTime} = nextProps;
+      ScoreActions.addScore({
+        gridSize: size,
+        shipCount: expectedShipCount,
+        playerOneShots: countShots(playerTwo.get('field')),
+        playerTwoShots: countShots(playerOne.get('field')),
+        gameTime,
+      });
+    }
   },
 
   render: function() {
@@ -58,20 +90,23 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
             fieldState={playerOne}
             myTurn={activeBoard !== 'playerOne'}
             gameRunning={gameRunning}
-            shipsAreVisible />
+            time={this.state.time}
+            shipsAreVisible
+            aiEnabled />
         </div>
         <div className="player-two">
           <Grid
             fieldState={playerTwo}
             myTurn={activeBoard !== 'playerTwo'}
-            gameRunning={gameRunning} />
+            gameRunning={gameRunning}
+            time={this.state.time} />
         </div>
         <div className="grid-options">
           <GridSize boardSize={size} />
           <GridShips boardSize={size} />
           <StartGame
-            clickAction={gameRunning ? GameActions.setupShips.bind(null, size, expectedShipCount) : GameActions.gameStart} />
-          <Timer gameRunning={gameRunning} />
+            clickAction={gameRunning || winner ? GameActions.setupShips.bind(null, size, expectedShipCount) : GameActions.gameStart} />
+          {gameRunning ? (<Timer tick={this.tick} time={this.state.time} />) : ''}
         </div>
       </div>
     );

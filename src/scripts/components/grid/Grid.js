@@ -1,16 +1,40 @@
 const React = require('react');
+const {List} = require('immutable');
 
 const FieldActions = require('../../actions/Field');
 const GameActions = require('../../actions/Game');
-const {hasShip} = require('../../util/grid');
+const {hasShip, randomNumber} = require('../../util/grid');
 
 const Grid = React.createClass({displayName: 'Grid',
+
+  getInitialState: function() {
+    return {possibleMoves: List(List()), acted: false};
+  },
+
   componentWillReceiveProps: function(nextProps) {
-    const {gameRunning, fieldState} = nextProps;
-    if (gameRunning && fieldState.get('health') === 0) {
-      GameActions.gameOver();
+    const {gameRunning, fieldState, time, aiEnabled, myTurn} = nextProps;
+    if (gameRunning) {
+      if (fieldState.get('health') === 0) {
+        GameActions.gameOver(time);
+      } else if (aiEnabled && !myTurn && !this.state.acted) {
+        this.setState({acted: true});
+        setTimeout(this.aiMove, 1000);
+      }
+    } else {
+      const size = fieldState.get('field').length;
+      this.setState({possibleMoves: List().setSize(size * size).map(function(val, i) {
+        return List.of(Math.floor(i / size), i % size);
+      })});
     }
     return true;
+  },
+
+  aiMove: function() {
+    const {possibleMoves} = this.state;
+    const index = randomNumber(possibleMoves.size);
+    const move = possibleMoves.get(index);
+    this.setState({possibleMoves: possibleMoves.delete(index)});
+    this.handleCellClick(move.first(), move.last());
   },
 
   handleCellClick: function(row, col) {
@@ -23,6 +47,7 @@ const Grid = React.createClass({displayName: 'Grid',
       if (!shipHit) {
         GameActions.turnOver();
       }
+      this.setState({acted: false});
     }
   },
 

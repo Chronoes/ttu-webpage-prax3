@@ -17,13 +17,13 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
     onGameOver: GameActions.gameOver,
   },
 
-  state: new Map({
-    playerOne: new Map({
+  state: Map({
+    playerOne: Map({
       field: FieldActions.createField(MAX_SIZE),
       ships: [],
       health: 0,
     }),
-    playerTwo: new Map({
+    playerTwo: Map({
       field: FieldActions.createField(MAX_SIZE),
       ships: [],
       health: 0,
@@ -33,6 +33,7 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
     size: MAX_SIZE,
     expectedShipCount: 0,
     winner: '',
+    gameTime: 0,
   }),
 
   onCreateFieldFor: function(playerField) {
@@ -43,7 +44,8 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
       .set('gameRunning', false)
       .set('activeBoard', 'playerTwo')
       .set('winner', '')
-      .set('expectedShipCount', 0));
+      .set('expectedShipCount', 0)
+      .set('gameTime', 0));
   },
 
   onPlaceShipsFor: function(playerShips) {
@@ -81,13 +83,16 @@ const GameStore = alt.createStore(immutable({displayName: 'GameStore',
   },
 
   onGameStart: function() {
-    this.setState(this.state.set('gameRunning', this.state.get('expectedShipCount') > 0));
+    this.setState(this.state
+      .set('gameRunning', this.state.get('expectedShipCount') > 0)
+      .set('winner', ''));
   },
 
-  onGameOver: function() {
+  onGameOver: function(time) {
     this.setState(this.state
       .set('gameRunning', false)
-      .set('winner', this.state.get('activeBoard') === 'playerOne' ? 'playerTwo' : 'playerOne'));
+      .set('winner', this.state.get('activeBoard') === 'playerOne' ? 'playerTwo' : 'playerOne')
+      .set('gameTime', time));
   },
 }));
 

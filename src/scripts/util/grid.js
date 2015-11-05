@@ -52,6 +52,14 @@ function updateGridWithShip(grid, ship) {
   return grid;
 }
 
+function countShots(grid) {
+  return grid.reduce(function(prevRow, row) {
+    return prevRow + row.filter(function(cell) {
+      return cell.props.cellClicked;
+    }).length;
+  }, 0);
+}
+
 module.exports = {
   isValidSquare,
   isEmptyCell,
@@ -60,4 +68,5 @@ module.exports = {
   hasShip,
   randomNumber,
   updateGridWithShip,
+  countShots,
 };
