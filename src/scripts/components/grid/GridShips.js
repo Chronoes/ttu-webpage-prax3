@@ -1,38 +1,38 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import GameActions from '../../actions/Game';
 import GridSize from './GridSize';
 
-const GridShips = React.createClass({displayName: 'GridShips',
-  statics: {
-    MAX_SHIP_COUNT: GridSize.MAX_SIZE - 1,
-    MIN_SHIP_COUNT: 1,
-  },
+class GridShips extends Component {
+  static displayName: 'GridShips';
+  static MAX_SHIP_COUNT = GridSize.MAX_SIZE - 1;
+  static MIN_SHIP_COUNT = 1;
 
-  placeNewShips: function(event) {
+  placeNewShips(event) {
     const count = event ? event.target.value : GridShips.MAX_SHIP_COUNT;
     GameActions.setupShips(this.props.boardSize, count);
-  },
+  }
 
-  shipCountOptions: function(maxShips) {
+  shipCountOptions(maxShips) {
     const {MIN_SHIP_COUNT} = GridShips;
-    for (var i = MIN_SHIP_COUNT, arr = []; i <= maxShips; i++) {
+    const arr = [];
+    for (let i = MIN_SHIP_COUNT; i <= maxShips; i++) {
       arr.push(<option key={i} value={i}>{i}</option>);
     }
     return arr;
-  },
+  }
 
-  render: function() {
+  render() {
     const maxShipCount = this.props.boardSize - 1;
     return (
       <div className="ship-select">
-        <select className="value-selection" defaultValue="0" onChange={this.placeNewShips}>
+        <select className="value-selection" defaultValue="0" onChange={this.placeNewShips.bind(this)}>
           <option className="disabled" value="0" disabled>Ships</option>
           {this.shipCountOptions(maxShipCount)}
         </select>
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = GridShips;
+export default GridShips;

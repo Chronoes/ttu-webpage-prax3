@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import connectToStores from 'alt/utils/connectToStores';
 
 import FieldActions from '../actions/Field';
@@ -12,42 +12,22 @@ import GridShips from './grid/GridShips';
 import StartGame from './StartGame';
 import Timer from './Timer';
 
-const GameBoard = React.createClass({displayName: 'GameBoard',
-  statics: {
-    getStores: function() {
-      return [GameStore];
-    },
+@connectToStores
+class GameBoard extends Component {
+  static displayName: 'GameBoard';
 
-    getPropsFromStores: function() {
-      const gameState = GameStore.getState();
-      return {
-        playerOne: gameState.get('playerOne'),
-        playerTwo: gameState.get('playerTwo'),
-        activeBoard: gameState.get('activeBoard'),
-        size: gameState.get('size'),
-        expectedShipCount: gameState.get('expectedShipCount'),
-        gameRunning: gameState.get('gameRunning'),
-        winner: gameState.get('winner'),
-        gameTime: gameState.get('gameTime'),
-      };
-    }
-  },
+  constructor(props) {
+    super(props);
+    this.state = {time: 0};
+  }
 
-  getInitialState: function() {
-    return {time: 0};
-  },
-
-  tick: function() {
-    this.setState({time: this.state.time + 1});
-  },
-
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (!nextProps.gameRunning) {
       this.setState({time: 0});
     }
-  },
+  }
 
-  shouldComponentUpdate: function(nextProps) {
+  shouldComponentUpdate(nextProps) {
     const {expectedShipCount, playerOne, playerTwo, size} = nextProps;
     if (playerOne.get('ships').length > expectedShipCount) {
       FieldActions.placeShipsFor('playerOne', FieldActions.createField(size), expectedShipCount);
@@ -58,9 +38,9 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
       return false;
     }
     return true;
-  },
+  }
 
-  componentWillUpdate: function(nextProps) {
+  componentWillUpdate(nextProps) {
     const {winner, gameRunning} = nextProps;
     if (!gameRunning && winner) {
       const {size, expectedShipCount, playerOne, playerTwo, gameTime} = nextProps;
@@ -72,11 +52,33 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
         gameTime,
       });
     }
-  },
+  }
 
-  render: function() {
+  static getStores() {
+    return [GameStore];
+  }
+
+  static getPropsFromStores() {
+    const gameState = GameStore.getState();
+    return {
+      playerOne: gameState.get('playerOne'),
+      playerTwo: gameState.get('playerTwo'),
+      activeBoard: gameState.get('activeBoard'),
+      size: gameState.get('size'),
+      expectedShipCount: gameState.get('expectedShipCount'),
+      gameRunning: gameState.get('gameRunning'),
+      winner: gameState.get('winner'),
+      gameTime: gameState.get('gameTime'),
+    };
+  }
+
+  tick() {
+    this.setState({time: this.state.time + 1});
+  }
+
+  render() {
     const {playerOne, playerTwo, activeBoard, size, gameRunning, winner, expectedShipCount} = this.props;
-    var currentHeader = 'Choose grid size and ship count';
+    let currentHeader = 'Choose grid size and ship count';
     if (gameRunning) {
       currentHeader = activeBoard === 'playerTwo' ? 'Player\'s turn' : 'Computer\'s turn';
     } else if (winner) {
@@ -106,11 +108,11 @@ const GameBoard = React.createClass({displayName: 'GameBoard',
           <GridShips boardSize={size} />
           <StartGame
             clickAction={gameRunning || winner ? GameActions.setupShips.bind(null, size, expectedShipCount) : GameActions.gameStart} />
-          {gameRunning ? (<Timer tick={this.tick} time={this.state.time} />) : ''}
+          {gameRunning ? (<Timer tick={this.tick.bind(this)} time={this.state.time} />) : ''}
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = connectToStores(GameBoard);
+export default GameBoard;

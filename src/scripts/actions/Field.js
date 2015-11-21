@@ -6,30 +6,35 @@ import Empty from '../components/Empty';
 import Ship from '../components/Ship';
 import {isValidSquare, randomNumber, updateGridWithShip} from '../util/grid';
 
-const FieldActions = alt.createActions({displayName: 'FieldActions',
-  createFieldFor: function(player, size) {
-    return {player, grid: FieldActions.createField(size)};
-  },
+@alt.createActions
+class FieldActions {
+  static displayName = 'FieldActions';
 
-  createField: function(size) {
-    for (var grid = []; grid.length < size;) {
-      for (var subgrid = []; subgrid.push(<Cell><Empty /></Cell>) < size;);
+  createFieldFor(player, size) {
+    return {player, grid: FieldActions.createField(size)};
+  }
+
+  createField(size) {
+    const grid = [];
+    for (; grid.length < size;) {
+      const subgrid = [];
+      for (; subgrid.push(<Cell><Empty /></Cell>) < size;);
       grid.push(subgrid);
     }
     return grid;
-  },
+  }
 
-  placeShipsFor: function(player, grid, count) {
+  placeShipsFor(player, grid, count) {
     const size = grid.length;
-    var updatedGrid = grid;
-    var ships = [];
-    for (var i = 0; i < count; i++) {
-      var tries = 0;
+    let updatedGrid = grid;
+    const ships = [];
+    for (let i = 0; i < count; i++) {
+      let tries = 0;
       while (tries < 20) {
         const row = randomNumber(size - 1);
         const col = randomNumber(size - 1);
-        var validShip = isValidSquare(grid, row, col);
-        for (var len = 1; len < Ship.LENGTH && validShip; len++) {
+        let validShip = isValidSquare(grid, row, col);
+        for (let len = 1; len < Ship.LENGTH && validShip; len++) {
           validShip = isValidSquare(updatedGrid, row, col + len);
         }
 
@@ -43,15 +48,15 @@ const FieldActions = alt.createActions({displayName: 'FieldActions',
       }
     }
     return {player, grid: updatedGrid, ships};
-  },
+  }
 
-  updateCell: function(cell, row, col, shipHit) {
+  updateCell(cell, row, col, shipHit) {
     return {
       cell: React.cloneElement(cell, {cellClicked: true}),
       row, col,
       shipHit: !cell.props.cellClicked && shipHit,
     };
-  },
-});
+  }
+}
 
-module.exports = FieldActions;
+export default FieldActions;

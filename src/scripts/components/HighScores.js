@@ -1,20 +1,20 @@
-import React from 'react';
+import React, {Component} from 'react';
 import connectToStores from 'alt/utils/connectToStores';
 
 import ScoreStore from '../stores/Score';
 
-const HighScores = React.createClass({displayName: 'HighScores',
-  statics: {
-    getStores: function() {
-      return [ScoreStore];
-    },
+@connectToStores
+class HighScores extends Component {
+  static displayName = 'HighScores';
+  static getStores() {
+    return [ScoreStore];
+  }
 
-    getPropsFromStores: function() {
-      return {scoreState: ScoreStore.getState()};
-    },
-  },
+  static getPropsFromStores() {
+    return {scoreState: ScoreStore.getState()};
+  }
 
-  render: function() {
+  render() {
     const {scoreState} = this.props;
     return (
       <div className="container-fluid">
@@ -40,7 +40,7 @@ const HighScores = React.createClass({displayName: 'HighScores',
         </table>
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = connectToStores(HighScores);
+export default HighScores;

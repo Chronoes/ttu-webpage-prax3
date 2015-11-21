@@ -2,42 +2,45 @@ import alt from '../altInstance';
 
 import FieldActions from './Field';
 
-const GameActions = alt.createActions({displayName: 'GameActions',
-  gameStart: function() {
-    return true;
-  },
+@alt.createActions
+class GameActions {
+  static displayName: 'GameActions';
 
-  gameOver: function(time) {
+  gameStart() {
+    return true;
+  }
+
+  gameOver(time) {
     return time;
-  },
+  }
 
-  turnOver: function() {
+  turnOver() {
     return true;
-  },
+  }
 
-  expectedShipCount: function(count) {
+  expectedShipCount(count) {
     return count;
-  },
+  }
 
-  setGameTime: function(time) {
+  setGameTime(time) {
     return time;
-  },
+  }
 
-  setupBoard: function(size) {
+  setupBoard(size) {
     return {
       playerOne: FieldActions.createFieldFor('playerOne', size),
       playerTwo: FieldActions.createFieldFor('playerTwo', size),
     };
-  },
+  }
 
-  setupShips: function(boardSize, count) {
+  setupShips(boardSize, count) {
     const {playerOne, playerTwo} = this.actions.setupBoard(boardSize);
     this.actions.expectedShipCount(count);
     return {
       playerOne: FieldActions.placeShipsFor(playerOne.player, playerOne.grid, count),
       playerTwo: FieldActions.placeShipsFor(playerTwo.player, playerTwo.grid, count),
     };
-  },
-});
+  }
+}
 
-module.exports = GameActions;
+export default GameActions;

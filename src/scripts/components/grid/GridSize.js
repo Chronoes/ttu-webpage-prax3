@@ -1,29 +1,29 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import GameActions from '../../actions/Game';
 
-const GridSize = React.createClass({displayName: 'GridSize',
-  statics: {
-    MIN_SIZE: 3,
-    MAX_SIZE: 10,
-  },
+class GridSize extends Component {
+  static displayName: 'GridSize';
+  static MIN_SIZE = 3;
+  static MAX_SIZE = 10;
 
-  createField: function(event) {
+  createField(event) {
     const size = event ? event.target.value : GridSize.MAX_SIZE;
     if (size >= GridSize.MIN_SIZE) {
       GameActions.setupBoard(size);
     }
-  },
+  }
 
-  sizeOptions: function() {
+  sizeOptions() {
     const {MIN_SIZE, MAX_SIZE} = GridSize;
-    for (var i = MIN_SIZE, arr = []; i <= MAX_SIZE; i++) {
+    const arr = [];
+    for (let i = MIN_SIZE; i <= MAX_SIZE; i++) {
       arr.push(<option key={i} value={i}>{i}</option>);
     }
     return arr;
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <div className="size-select">
         <select className="value-selection" defaultValue="0" onChange={this.createField}>
@@ -32,7 +32,7 @@ const GridSize = React.createClass({displayName: 'GridSize',
         </select>
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = GridSize;
+export default GridSize;
