@@ -1,16 +1,16 @@
-const React = require('react');
-const connectToStores = require('alt/utils/connectToStores');
+import React from 'react';
+import connectToStores from 'alt/utils/connectToStores';
 
-const FieldActions = require('../actions/Field');
-const GameActions = require('../actions/Game');
-const ScoreActions = require('../actions/Score');
-const GameStore = require('../stores/Game');
-const {countShots} = require('../util/grid');
-const Grid = require('./grid/Grid');
-const GridSize = require('./grid/GridSize');
-const GridShips = require('./grid/GridShips');
-const StartGame = require('./StartGame');
-const Timer = require('./Timer');
+import FieldActions from '../actions/Field';
+import GameActions from '../actions/Game';
+import ScoreActions from '../actions/Score';
+import GameStore from '../stores/Game';
+import {countShots} from '../util/grid';
+import Grid from './grid/Grid';
+import GridSize from './grid/GridSize';
+import GridShips from './grid/GridShips';
+import StartGame from './StartGame';
+import Timer from './Timer';
 
 const GameBoard = React.createClass({displayName: 'GameBoard',
   statics: {

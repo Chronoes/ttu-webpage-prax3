@@ -1,10 +1,10 @@
-const immutable = require('alt/utils/ImmutableUtil');
-const {Map} = require('immutable');
+import immutable from 'alt/utils/ImmutableUtil';
+import {Map} from 'immutable';
 
-const alt = require('../altInstance');
-const FieldActions = require('../actions/Field');
-const GameActions = require('../actions/Game');
-const {MAX_SIZE} = require('../components/grid/GridSize');
+import alt from '../altInstance';
+import FieldActions from '../actions/Field';
+import GameActions from '../actions/Game';
+import {MAX_SIZE} from '../components/grid/GridSize';
 
 const GameStore = alt.createStore(immutable({displayName: 'GameStore',
   bindListeners: {

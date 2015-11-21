@@ -1,27 +1,37 @@
-const immutable = require('alt/utils/ImmutableUtil');
-const {Map, List} = require('immutable');
+import immutable from 'alt/utils/ImmutableUtil';
+import {Map, List} from 'immutable';
 
-const alt = require('../altInstance');
-const ScoreActions = require('../actions/Score');
+import alt from '../altInstance';
+import ScoreActions from '../actions/Score';
 
-const ScoreStore = alt.createStore(immutable({displayName: 'ScoreStore',
-  bindListeners: {
-    onAddScore: ScoreActions.addScore,
-  },
+@alt.createStore
+@immutable
+class ScoreStore {
+  static displayName = 'ScoreStore';
 
-  state: List([
-    Map({
-      gridSize: 0,
-      shipCount: 0,
-      playerOneShots: 0,
-      playerTwoShots: 0,
-      gameTime: 0,
-    }),
-  ]),
+  constructor() {
+    this.bindActions(ScoreActions);
+    this.state = List([
+      Map({
+        gridSize: 0,
+        shipCount: 0,
+        playerOneShots: 0,
+        playerTwoShots: 0,
+        gameTime: 0,
+      }),
+    ]);
+  }
 
-  onAddScore: function(newScore) {
-    this.setState(this.state.unshift(Map(newScore)));
-  },
-}));
+  onAddScore(newScore) {
+    if (newScore) {
+      this.setState(this.state.unshift(Map(newScore)));
+    }
+  }
 
-module.exports = ScoreStore;
+  onAddScoreError(resp) {
+    console.log(resp);
+  }
+}
+
+
+export default ScoreStore;

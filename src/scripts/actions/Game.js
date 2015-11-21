@@ -1,6 +1,6 @@
-const alt = require('../altInstance');
+import alt from '../altInstance';
 
-const FieldActions = require('./Field');
+import FieldActions from './Field';
 
 const GameActions = alt.createActions({displayName: 'GameActions',
   gameStart: function() {

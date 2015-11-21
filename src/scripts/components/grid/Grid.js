@@ -1,9 +1,9 @@
-const React = require('react');
-const {List} = require('immutable');
+import React from 'react';
+import {List} from 'immutable';
 
-const FieldActions = require('../../actions/Field');
-const GameActions = require('../../actions/Game');
-const {hasShip, randomNumber} = require('../../util/grid');
+import FieldActions from '../../actions/Field';
+import GameActions from '../../actions/Game';
+import {hasShip, randomNumber} from '../../util/grid';
 
 const Grid = React.createClass({displayName: 'Grid',
 

@@ -1,6 +1,6 @@
-const React = require('react');
+import React from 'react';
 
-const GameActions = require('../../actions/Game');
+import GameActions from '../../actions/Game';
 
 const GridSize = React.createClass({displayName: 'GridSize',
   statics: {

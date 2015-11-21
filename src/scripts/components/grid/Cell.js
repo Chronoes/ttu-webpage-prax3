@@ -1,6 +1,6 @@
-const React = require('react');
+import React from 'react';
 
-const Empty = require('../Empty');
+import Empty from '../Empty';
 
 const Cell = React.createClass({displayName: 'Cell',
   propTypes: {

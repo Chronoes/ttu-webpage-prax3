@@ -1,4 +1,4 @@
-const Alt = require('alt');
+import Alt from 'alt';
 
 const altInstance = new Alt();
 

@@ -1,7 +1,7 @@
-const React = require('react');
-const connectToStores = require('alt/utils/connectToStores');
+import React from 'react';
+import connectToStores from 'alt/utils/connectToStores';
 
-const ScoreStore = require('../stores/Score');
+import ScoreStore from '../stores/Score';
 
 const HighScores = React.createClass({displayName: 'HighScores',
   statics: {

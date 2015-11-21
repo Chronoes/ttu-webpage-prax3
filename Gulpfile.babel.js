@@ -1,15 +1,15 @@
-const gulp = require('gulp');
-const browserify = require('browserify');
-const source = require('vinyl-source-stream');
-const sass = require('gulp-sass');
-const eslint = require('gulp-eslint');
-const runSequence = require('run-sequence');
-const sasslint = require('gulp-sass-lint');
-const babelify = require('babelify');
-const sloc = require('gulp-sloc');
-const cache = require('gulp-cached');
-const remember = require('gulp-remember');
-const watchify = require('watchify');
+import gulp from 'gulp';
+import browserify from 'browserify';
+import source from 'vinyl-source-stream';
+import sass from 'gulp-sass';
+import eslint from 'gulp-eslint';
+import runSequence from 'run-sequence';
+import sasslint from 'gulp-sass-lint';
+import babelify from 'babelify';
+import sloc from 'gulp-sloc';
+import cache from 'gulp-cached';
+import remember from 'gulp-remember';
+import watchify from 'watchify';
 
 const directories = {
   source: {
@@ -17,7 +17,7 @@ const directories = {
     js: './src/scripts',
     html: './src/html',
     css: './src/style' },
-  distribution: './remote',
+  distribution: './prax3',
 };
 
 gulp.task('lint:js', function() {
@@ -59,7 +59,7 @@ gulp.task('js', function() {
     entries: directories.source.js + '/main.js',
     extensions: ['.js'],
     debug: true,
-    transform: babelify,
+    transform: babelify.configure({optional: ['es7']}),
   };
   return browserify(opts)
     .bundle()
@@ -72,7 +72,7 @@ gulp.task('js:watch', function() {
     entries: directories.source.js + '/main.js',
     extensions: ['.js'],
     debug: true,
-    transform: babelify,
+    transform: babelify.configure({optional: ['es7']}),
   }, watchify.args);
   return watchify(browserify(opts))
     .bundle()

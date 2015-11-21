@@ -1,8 +1,8 @@
-const React = require('react');
+import React from 'react';
 
-const Cell = require('../components/grid/Cell');
-const Empty = require('../components/Empty');
-const Ship = require('../components/Ship');
+import Cell from '../components/grid/Cell';
+import Empty from '../components/Empty';
+import Ship from '../components/Ship';
 
 const ADJACENTS = [
   {row: 0, col: 1},

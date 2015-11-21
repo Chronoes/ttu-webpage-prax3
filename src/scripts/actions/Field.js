@@ -1,10 +1,10 @@
-const React = require('react');
+import React from 'react';
 
-const alt = require('../altInstance');
-const Cell = require('../components/grid/Cell');
-const Empty = require('../components/Empty');
-const Ship = require('../components/Ship');
-const {isValidSquare, randomNumber, updateGridWithShip} = require('../util/grid');
+import alt from '../altInstance';
+import Cell from '../components/grid/Cell';
+import Empty from '../components/Empty';
+import Ship from '../components/Ship';
+import {isValidSquare, randomNumber, updateGridWithShip} from '../util/grid';
 
 const FieldActions = alt.createActions({displayName: 'FieldActions',
   createFieldFor: function(player, size) {
