@@ -31,6 +31,7 @@ class GameStore {
       expectedShipCount: 0,
       winner: '',
       gameTime: 0,
+      username: '',
     });
   }
 
@@ -50,9 +51,7 @@ class GameStore {
   onPlaceShipsFor(playerShips) {
     const {player, grid, ships} = playerShips;
     this.setState(this.state
-      .update('expectedShipCount', function(value) {
-        return value > ships.length ? ships.length : value;
-      })
+      .update('expectedShipCount', value => value > ships.length ? ships.length : value)
       .setIn([player, 'health'], ships.length * 2)
       .setIn([player, 'ships'], ships)
       .setIn([player, 'field'], grid));
@@ -62,29 +61,26 @@ class GameStore {
     const player = this.state.get('activeBoard');
     const {cell, row, col, shipHit} = cellInfo;
     this.setState(this.state
-      .updateIn([player, 'health'], function(value) {
-        return shipHit ? value - 1 : value;
-      })
-      .updateIn([player, 'field'], function(grid) {
+      .updateIn([player, 'health'], value => shipHit ? value - 1 : value)
+      .updateIn([player, 'field'], grid => {
         grid[row][col] = cell;
         return grid;
       }));
   }
 
   onTurnOver() {
-    this.setState(this.state.update('activeBoard', function(current) {
-      return current === 'playerOne' ? 'playerTwo' : 'playerOne';
-    }));
+    this.setState(this.state.update('activeBoard', current => current === 'playerOne' ? 'playerTwo' : 'playerOne'));
   }
 
   onExpectedShipCount(count) {
     this.setState(this.state.set('expectedShipCount', count));
   }
 
-  onGameStart() {
+  onGameStart(username) {
     this.setState(this.state
       .set('gameRunning', this.state.get('expectedShipCount') > 0)
-      .set('winner', ''));
+      .set('winner', '')
+      .set('username', username));
   }
 
   onGameOver(time) {

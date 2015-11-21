@@ -5,7 +5,11 @@ import GameBoard from './components/GameBoard';
 import HighScores from './components/HighScores';
 import Navbar from './components/Navbar';
 
+import ScoreActions from './actions/Score';
+
 class App extends Component {
+  static displayName = 'App';
+
   constructor(props) {
     super(props);
     this.state = {
@@ -15,6 +19,10 @@ class App extends Component {
       },
       currentRoute: '/',
     };
+  }
+
+  componentWillMount() {
+    ScoreActions.getScores();
   }
 
   routeTo(event) {
@@ -39,6 +47,5 @@ class App extends Component {
   }
 }
 
-App.displayName = 'App';
 
-module.exports = App;
+export default App;

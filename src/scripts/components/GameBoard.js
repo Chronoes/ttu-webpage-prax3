@@ -5,7 +5,6 @@ import FieldActions from '../actions/Field';
 import GameActions from '../actions/Game';
 import ScoreActions from '../actions/Score';
 import GameStore from '../stores/Game';
-import {countShots} from '../util/grid';
 import Grid from './grid/Grid';
 import GridSize from './grid/GridSize';
 import GridShips from './grid/GridShips';
@@ -43,13 +42,14 @@ class GameBoard extends Component {
   componentWillUpdate(nextProps) {
     const {winner, gameRunning} = nextProps;
     if (!gameRunning && winner) {
-      const {size, expectedShipCount, playerOne, playerTwo, gameTime} = nextProps;
+      const {size, expectedShipCount, playerOne, playerTwo, gameTime, username} = nextProps;
       ScoreActions.addScore({
         gridSize: size,
         shipCount: expectedShipCount,
-        playerOneShots: countShots(playerTwo.get('field')),
-        playerTwoShots: countShots(playerOne.get('field')),
+        playerOneScore: Math.trunc(playerTwo.get('ships').length - playerTwo.get('health') / 2),
+        playerTwoScore: Math.trunc(playerOne.get('ships').length - playerOne.get('health') / 2),
         gameTime,
+        username,
       });
     }
   }
@@ -69,6 +69,7 @@ class GameBoard extends Component {
       gameRunning: gameState.get('gameRunning'),
       winner: gameState.get('winner'),
       gameTime: gameState.get('gameTime'),
+      username: gameState.get('username'),
     };
   }
 
@@ -76,13 +77,19 @@ class GameBoard extends Component {
     this.setState({time: this.state.time + 1});
   }
 
+  startGame() {
+    const username = this.refs.username.value;
+    GameActions.gameStart(username);
+  }
+
   render() {
-    const {playerOne, playerTwo, activeBoard, size, gameRunning, winner, expectedShipCount} = this.props;
+    const {playerOne, playerTwo, activeBoard, size, gameRunning, winner, expectedShipCount, username} = this.props;
+    const processedUsername = username.length > 20 ? username.substring(0, 20) + '...' : username;
     let currentHeader = 'Choose grid size and ship count';
     if (gameRunning) {
-      currentHeader = activeBoard === 'playerTwo' ? 'Player\'s turn' : 'Computer\'s turn';
+      currentHeader = activeBoard === 'playerTwo' ? `Player ${processedUsername} turn` : 'Computer\'s turn';
     } else if (winner) {
-      currentHeader = winner === 'playerOne' ? 'Player wins!' : 'Computer wins!';
+      currentHeader = winner === 'playerOne' ? `Player ${processedUsername} wins!` : 'Computer wins!';
     }
     return (
       <div className="container-fluid">
@@ -104,10 +111,11 @@ class GameBoard extends Component {
             time={this.state.time} />
         </div>
         <div className="grid-options">
+          <input ref="username"></input>
           <GridSize boardSize={size} />
           <GridShips boardSize={size} />
           <StartGame
-            clickAction={gameRunning || winner ? GameActions.setupShips.bind(null, size, expectedShipCount) : GameActions.gameStart} />
+            clickAction={gameRunning || winner ? GameActions.setupShips.bind(null, size, expectedShipCount) : this.startGame.bind(this)} />
           {gameRunning ? (<Timer tick={this.tick.bind(this)} time={this.state.time} />) : ''}
         </div>
       </div>

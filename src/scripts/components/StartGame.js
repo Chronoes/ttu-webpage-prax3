@@ -1,9 +1,9 @@
 import React from 'react';
 
-function StartGame(props) {
+function StartGame({clickAction}) {
   return (
     <div className="start-game">
-      <button className="btn-start-game" onClick={props.clickAction}>
+      <button className="btn-start-game" onClick={clickAction}>
         Start Game
       </button>
     </div>
@@ -12,4 +12,4 @@ function StartGame(props) {
 
 StartGame.displayName = 'StartGame';
 
-module.exports = StartGame;
+export default StartGame;

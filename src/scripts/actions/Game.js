@@ -6,8 +6,8 @@ import FieldActions from './Field';
 class GameActions {
   static displayName: 'GameActions';
 
-  gameStart() {
-    return true;
+  gameStart(username) {
+    return username;
   }
 
   gameOver(time) {
