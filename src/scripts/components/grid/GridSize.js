@@ -26,7 +26,7 @@ class GridSize extends Component {
   render() {
     return (
       <div className="size-select">
-        <select className="value-selection" defaultValue="0" onChange={this.createField}>
+        <select className="value-selection" defaultValue={this.props.boardSize} onChange={this.createField}>
           <option className="disabled" value="0" disabled>Grid Size</option>
           {this.sizeOptions()}
         </select>

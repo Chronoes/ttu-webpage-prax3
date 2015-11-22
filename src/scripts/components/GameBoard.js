@@ -17,7 +17,10 @@ class GameBoard extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {time: 0};
+    this.state = {
+      time: 0,
+      errorMessage: '',
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -78,16 +81,28 @@ class GameBoard extends Component {
   }
 
   startGame() {
+    const {size, expectedShipCount} = this.props;
     const username = this.refs.username.value;
-    GameActions.gameStart(username);
+    let errorMessage = '';
+    if (!username) {
+      errorMessage = 'Please enter username';
+    } else if (size === 0) {
+      errorMessage = 'Please select grid size';
+    } else if (expectedShipCount === 0) {
+      errorMessage = 'Please select ship count';
+    } else {
+      GameActions.gameStart(username);
+    }
+    this.setState({errorMessage});
   }
 
   render() {
     const {playerOne, playerTwo, activeBoard, size, gameRunning, winner, expectedShipCount, username} = this.props;
-    const processedUsername = username.length > 20 ? username.substring(0, 20) + '...' : username;
+    const {time, errorMessage} = this.state;
+    const processedUsername = username.length > 50 ? username.substring(0, 50) + '...' : username;
     let currentHeader = 'Choose grid size and ship count';
     if (gameRunning) {
-      currentHeader = activeBoard === 'playerTwo' ? `Player ${processedUsername} turn` : 'Computer\'s turn';
+      currentHeader = activeBoard === 'playerTwo' ? `Player ${processedUsername}\'s turn` : 'Computer\'s turn';
     } else if (winner) {
       currentHeader = winner === 'playerOne' ? `Player ${processedUsername} wins!` : 'Computer wins!';
     }
@@ -99,7 +114,7 @@ class GameBoard extends Component {
             fieldState={playerOne}
             myTurn={activeBoard !== 'playerOne'}
             gameRunning={gameRunning}
-            time={this.state.time}
+            time={time}
             shipsAreVisible
             aiEnabled />
         </div>
@@ -108,15 +123,23 @@ class GameBoard extends Component {
             fieldState={playerTwo}
             myTurn={activeBoard !== 'playerTwo'}
             gameRunning={gameRunning}
-            time={this.state.time} />
+            time={time} />
         </div>
         <div className="grid-options">
-          <input ref="username"></input>
+          <input
+            type="text"
+            className="username"
+            ref="username"
+            disabled={gameRunning}
+            placeholder="username"
+            defaultValue={username}
+            required />
           <GridSize boardSize={size} />
-          <GridShips boardSize={size} />
+          <GridShips boardSize={size} current={expectedShipCount} />
           <StartGame
             clickAction={gameRunning || winner ? GameActions.setupShips.bind(null, size, expectedShipCount) : this.startGame.bind(this)} />
-          {gameRunning ? (<Timer tick={this.tick.bind(this)} time={this.state.time} />) : ''}
+          {errorMessage ? (<div className="alert-gameboard" >{errorMessage}</div>) : ''}
+          {gameRunning ? (<Timer tick={this.tick.bind(this)} time={time} />) : ''}
         </div>
       </div>
     );

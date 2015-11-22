@@ -27,7 +27,7 @@ class GameStore {
       }),
       gameRunning: false,
       activeBoard: 'playerTwo',
-      size: MAX_SIZE,
+      size: 0,
       expectedShipCount: 0,
       winner: '',
       gameTime: 0,

@@ -67,3 +67,9 @@ body {
 .ship-empty {
   padding: 50%;
 }
+
+.username {
+  @extend .form-control;
+  background-color: #ffa439;
+  border-radius: .25rem;
+}

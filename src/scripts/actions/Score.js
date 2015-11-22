@@ -5,15 +5,15 @@ import alt from '../altInstance';
 class ScoreActions {
   static displayName = 'ScoreActions';
 
-  getScores() {
+  getScores(filters) {
+    const filterParams = filters ? filters : {};
     get('../cgi-bin/prax3/scores.py', {
       params: {
         action: 'get',
+        ...filterParams,
       }
     })
-    .then(response => {
-      this.dispatch(response.data);
-    })
+    .then(response => this.dispatch(response.data))
     .catch(response => this.actions.getScoresError(response));
   }
 
@@ -26,12 +26,9 @@ class ScoreActions {
       params: {
         action: 'add',
         ...newScore,
-      }
+      },
     })
-    .then(response => {
-      console.log(response);
-      this.dispatch(response.data);
-    })
+    .then(response => this.dispatch(response.data))
     .catch(response => this.actions.addScoreError(response));
   }
 

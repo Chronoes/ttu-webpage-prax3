@@ -23,12 +23,12 @@ class GridShips extends Component {
   }
 
   render() {
-    const maxShipCount = this.props.boardSize - 1;
+    const {boardSize, current} = this.props;
     return (
       <div className="ship-select">
-        <select className="value-selection" defaultValue="0" onChange={this.placeNewShips.bind(this)}>
+        <select className="value-selection" defaultValue={current} onChange={this.placeNewShips.bind(this)}>
           <option className="disabled" value="0" disabled>Ships</option>
-          {this.shipCountOptions(maxShipCount)}
+          {this.shipCountOptions(boardSize - 1)}
         </select>
       </div>
     );

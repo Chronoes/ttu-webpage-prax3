@@ -25,9 +25,10 @@ class ScoreStore {
   }
 
   orderScore(score) {
+    const {username} = score;
     return Map({
       dateTime: score.dateTime,
-      username: score.username,
+      username: username.length > 50 ? username.substring(0, 50) + '...' : username,
       gridSize: score.gridSize,
       shipCount: score.shipCount,
       playerOneScore: score.playerOneScore,
@@ -38,7 +39,7 @@ class ScoreStore {
 
   onAddScore(newScore) {
     if (newScore) {
-      this.setState(this.state.unshift(this.orderScore(newScore)));
+      this.setState(this.state.push(this.orderScore(newScore)));
     }
   }
 

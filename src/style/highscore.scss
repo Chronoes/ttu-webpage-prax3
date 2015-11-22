@@ -10,8 +10,22 @@
   }
 
   & th {
+    cursor: pointer;
     font-size: .9rem;
     padding: .25rem;
     text-align: center;
+
+    &:hover {
+      background-color: #905ba3;
+    }
   }
+
+}
+
+.highscore-username {
+  @extend .username;
+  margin-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 25em;
 }
